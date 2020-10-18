@@ -7,8 +7,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace CloudObjects.App.Controllers
-{
-    [Route("api/[controller]")]
+{    
     [ApiController]
     public class AccountController : DataController
     {
@@ -16,7 +15,8 @@ namespace CloudObjects.App.Controllers
         {
         }
 
-        [HttpPost]        
+        [HttpPost]
+        [Route("api/[controller]")]
         public async Task<IActionResult> Post(Account account) => await DataActionAsync(account, async () =>
         {
             account.Key = GetKey();

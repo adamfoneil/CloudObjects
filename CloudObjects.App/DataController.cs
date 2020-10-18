@@ -33,7 +33,8 @@ namespace CloudObjects.App
         {
             try
             {
-                var acct = await Data.GetWhereAsync<Account>(new { name = accountName });                
+                var acct = await Data.GetWhereAsync<Account>(new { name = accountName });
+                if (acct == null) throw new Exception("Account name not found.");
                 if (acct.Key.Equals(accountKey)) return acct.Id;
                 throw new Exception("Missing or invalid account key.");
             }
