@@ -19,7 +19,10 @@ namespace CloudObjects.App.Controllers
         [HttpPost]        
         public async Task<IActionResult> Post(Account account) => await DataActionAsync(account, async () =>
         {
-            return await InsertAccountInner(account);
+            account.Key = GetKey();
+            account.InvoiceDate = DateTime.UtcNow.AddDays(30);
+            await Data.InsertAsync(account);
+            return account;
         });
 
         [HttpPut]
@@ -35,14 +38,6 @@ namespace CloudObjects.App.Controllers
         private static string GetKey()
         {
             return StringId.New(50, StringIdRanges.Lower | StringIdRanges.Upper | StringIdRanges.Numeric | StringIdRanges.Special);
-        }
-
-        private async Task<object> InsertAccountInner(Account model)
-        {
-            model.Key = GetKey();
-            model.InvoiceDate = DateTime.UtcNow.AddDays(30);
-            await Data.InsertAsync(model);
-            return model;
-        }
+        }       
     }
 }
