@@ -27,3 +27,14 @@ I do some seemingly oddball things with the Model project dependency. Instead of
 
 ### Note about Testing projects
 There are two test projects [Testing.App](https://github.com/adamfoneil/CloudObjects/tree/master/Testing.App) and [Testing.Client](https://github.com/adamfoneil/CloudObjects/tree/master/Testing.Client). I had to separate them because of how the Model classes are linked in both the App and Client projects. If I had a single test project, then the Model classes would be linked twice, which would offend the C# compiler. Having separate test projects fixes that.
+
+### Cloning and running the project
+You can clone and build the project of course, but note that I [exclude the database connection info](https://github.com/adamfoneil/CloudObjects/blob/master/.gitignore#L341) from source control because I use credentials that I need to keep private. To run the project, you'd need to create a local database instance as well as create a json file like this:
+
+```json
+{
+  "ConnectionStrings": {
+    "Default": "your connection string"
+  }
+}
+```
