@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>AO.CloudObjects.Client</PackageId>
+    <Authors>Adam O'Neil</Authors>
+    <Product>AO.CloudObjects.Client</Product>
+    <Description>API client for CloudObjects service</Description>
+    <PackageProjectUrl>https://cloudobjects.azurewebsites.net/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/adamfoneil/CloudObjects</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
