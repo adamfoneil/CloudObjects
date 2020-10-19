@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data;
+using Testing.Static;
 
 namespace Testing
 {
@@ -11,12 +12,6 @@ namespace Testing
     public class QueryTests
     {
         [TestMethod]
-        public void ListStoredObjectsQuery() => QueryHelper.Test<ListStoredObjects>(GetConnection);
-
-        private IDbConnection GetConnection() => new SqlConnection(GetConfig().GetConnectionString("Default"));
-
-        private IConfigurationRoot GetConfig() => new ConfigurationBuilder()
-            .AddJsonFile("Config/connection.json")
-            .Build();
+        public void ListStoredObjectsQuery() => QueryHelper.Test<ListStoredObjects>(ConfigHelper.GetConnection);        
     }
 }
