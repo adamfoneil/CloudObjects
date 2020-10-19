@@ -15,13 +15,24 @@ namespace CloudObjects.App.Controllers
         {
         }
 
+        [HttpPost]
+        [Route("api/[controller]/{accountName}")]
+        public async Task<IActionResult> Post([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, StoredObject model) =>
+            await DataActionAsync(model, async () =>
+            {
+                await PreSaveInner(accountName, accountKey, model);
+                await Data.InsertAsync(model);
+                return model;
+            });
+
         [HttpGet]
         [Route("api/[controller]/{accountName}/name")]
         public async Task<IActionResult> GetByName([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, string name)
         {
             var acctId = await VerifyAccountId(accountName, accountKey);
             var result = await Data.GetWhereAsync<StoredObject>(new { accountId = acctId, name });
-            return Ok(result);
+            if (result == null) return BadRequest();
+            return Ok(result);            
         }
 
         [HttpGet]
@@ -30,6 +41,7 @@ namespace CloudObjects.App.Controllers
         {
             var acctId = await VerifyAccountId(accountName, accountKey);
             var result = await Data.GetAsync<StoredObject>(id);
+            if (result == null) return BadRequest();
             if (result.AccountId != acctId) return BadRequest();
             return Ok(result);
         }
@@ -51,16 +63,6 @@ namespace CloudObjects.App.Controllers
             return Ok(results);
         }
 
-        [HttpPost]
-        [Route("api/[controller]/{accountName}")]
-        public async Task<IActionResult> Post([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, StoredObject model) =>
-            await DataActionAsync(model, async () =>
-            {
-                await PreSaveInner(accountName, accountKey, model);
-                await Data.InsertAsync(model);
-                return model;
-            });
-
         [HttpPut]
         [Route("api/[controller]/{accountName}")]
         public async Task<IActionResult> Put([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, StoredObject model) =>
@@ -70,6 +72,29 @@ namespace CloudObjects.App.Controllers
                 await Data.MergeAsync(model);
                 return model;
             });
+
+        [HttpDelete]
+        [Route("api/[controller]/{accountName}/id")]
+        public async Task<IActionResult> DeleteById([FromRoute]string accountName, [FromQuery(Name = "key")] string accountKey, long id)
+        {
+            var acctId = await VerifyAccountId(accountName, accountKey);
+            var result = await Data.GetAsync<StoredObject>(id);
+            if (result == null) return BadRequest();
+            if (result.AccountId != acctId) return BadRequest();
+            await Data.DeleteAsync<StoredObject>(id);
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("api/[controller]/{accountName}/name")]
+        public async Task<IActionResult> DeleteByName([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, string name)
+        {
+            var acctId = await VerifyAccountId(accountName, accountKey);
+            var result = await Data.GetWhereAsync<StoredObject>(new { accountId = acctId, name });
+            if (result == null) return BadRequest();
+            await Data.DeleteAsync<StoredObject>(result.Id);
+            return Ok();
+        }
 
         private async Task PreSaveInner(string accountName, string accountKey, StoredObject model)
         {

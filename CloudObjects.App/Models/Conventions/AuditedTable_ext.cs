@@ -9,8 +9,12 @@ namespace CloudObjects.Models.Conventions
 {
     public abstract partial class AuditedTable : IAudit, ITrigger
     {
+        public abstract bool TrackDeletions { get; }
+
         public async Task RowDeletedAsync(IDbConnection connection, IDbTransaction txn = null, IUserBase user = null)
         {
+            if (!TrackDeletions) return;
+
             var activity = new Activity()
             {
                 AccountId = AuditAccountId,

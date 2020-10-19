@@ -1,5 +1,7 @@
-﻿using CloudObjects.Models;
+﻿using CloudObjects.App.Queries;
+using CloudObjects.Models;
 using Dapper.CX.Classes;
+using Dapper.CX.SqlServer.AspNetCore.Extensions;
 using Dapper.CX.SqlServer.Services;
 using Microsoft.AspNetCore.Mvc;
 using StringIdLibrary;
@@ -17,13 +19,17 @@ namespace CloudObjects.App.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public async Task<IActionResult> Post(Account account) => await DataActionAsync(account, async () =>
+        public async Task<IActionResult> Post(string name)
         {
-            account.Key = GetKey();
-            account.InvoiceDate = DateTime.UtcNow.AddDays(30);
+            var account = new Account()
+            {
+                Name = name,
+                Key = GetKey(),
+                InvoiceDate = DateTime.UtcNow.AddDays(30)
+            };            
             await Data.InsertAsync(account);
-            return account;
-        });
+            return Ok(account);
+        }
 
         [HttpPut]
         [Route("api/[controller]/{accountName}")]
@@ -34,6 +40,16 @@ namespace CloudObjects.App.Controllers
             await Data.UpdateAsync(account);
             return account;                                    
         });
+
+        [HttpDelete]
+        [Route("api/[controller]/{accountName}")]
+        public async Task<IActionResult> Delete([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey)
+        {
+            var acctId = await VerifyAccountId(accountName, accountKey);
+            await Data.QueryAsync(new DeleteAccountActivity() { AccountId = acctId });
+            await Data.DeleteAsync<Account>(acctId);
+            return Ok();
+        }
 
         private static string GetKey()
         {

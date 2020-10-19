@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CloudObjects.Models
 {
-    public class StoredObject : AuditedTable
+    public partial class StoredObject : AuditedTable
     {
         [References(typeof(Account))]
         [Key]

@@ -3,12 +3,15 @@ using AO.Models.Interfaces;
 using System;
 using System.Data;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 
 namespace CloudObjects.Models
 {
     public partial class Account : IValidate
     {
+        public override bool TrackDeletions => false;
+
         public ValidateResult Validate()
         {
             const string allowedChars = "abcdefghijklmnopqrstuvwxyz1234567890.-";

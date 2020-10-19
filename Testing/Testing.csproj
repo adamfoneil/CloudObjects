@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CloudObjects.App\CloudObjects.App.csproj" />
+    <ProjectReference Include="..\CloudObjects.Client\CloudObjects.Client.csproj" />
   </ItemGroup>
 
 </Project>
