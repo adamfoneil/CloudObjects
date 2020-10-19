@@ -38,3 +38,4 @@ You can clone and build the project of course, but note that I [exclude the data
   }
 }
 ```
+You can create the local database using my [Model Sync](http://www.aosoftware.net/modelSync.html) app, but I would probably need to do a walkthrough on that to make that easy for you.
