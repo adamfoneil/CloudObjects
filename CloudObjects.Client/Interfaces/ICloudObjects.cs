@@ -16,7 +16,10 @@ namespace CloudObjects.Client.Interfaces
         [Put("/api/Account/{credentials.AccountName}?key={credentials.AccountKey}")]
         Task<Account> UpdateAccountAsync(ApiCredentials credentials, [Body]Account account);
 
-        [Post("/api/StoredObject/{credentials.AccountName]?key={credentials.AccountKey}")]
+        [Post("/api/Object/{credentials.AccountName}?key={credentials.AccountKey}")]
         Task<StoredObject> CreateObjectAsync(ApiCredentials credentials, [Body]StoredObject @object);
+
+        [Put("/api/Object/{credentials.AccountName}?key={credentials.AccountKey}")]
+        Task<StoredObject> UpdateObjectAsync(ApiCredentials credentials, [Body]StoredObject @object);
     }
 }

@@ -9,32 +9,33 @@ using System.Threading.Tasks;
 namespace CloudObjects.App.Controllers
 {    
     [ApiController]
-    public class StoredObjectController : DataController
+    public class ObjectController : DataController
     {
-        public StoredObjectController(DapperCX<long, SystemUser> data) : base(data)
+        public ObjectController(DapperCX<long, SystemUser> data) : base(data)
         {
         }
 
         [HttpPost]
         [Route("api/[controller]/{accountName}")]
-        public async Task<IActionResult> Post([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, StoredObject model) =>
+        public async Task<IActionResult> Post([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, StoredObject @object) =>
             await TryOnVerified(accountName, accountKey, async (acctId) =>
             {
-                model.AccountId = acctId;
-                model.Length = model.Json.Length;                
-                await Data.InsertAsync(model);
-                return model;
+                @object.AccountId = acctId;
+                @object.Length = @object.Json.Length;
+                //@object.Url = BaseUrl($"/api/Object/{accountName}/id/{");
+                await Data.InsertAsync(@object);
+                return @object;
             });
 
         [HttpPut]
         [Route("api/[controller]/{accountName}")]
-        public async Task<IActionResult> Put([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, StoredObject model) =>
+        public async Task<IActionResult> Put([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, StoredObject @object) =>
             await TryOnVerified(accountName, accountKey, async (acctId) =>
             {
-                model.AccountId = acctId;
-                model.Length = model.Json.Length;
-                await Data.MergeAsync(model);
-                return model;
+                @object.AccountId = acctId;
+                @object.Length = @object.Json.Length;
+                await Data.MergeAsync(@object);
+                return @object;
             });
 
         [HttpGet]

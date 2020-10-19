@@ -1,6 +1,7 @@
 ﻿using CloudObjects.Models;
 using Dapper.CX.Classes;
 using Dapper.CX.SqlServer.Services;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -49,6 +50,12 @@ namespace CloudObjects.App
             if (acct == null) throw new Exception("Account name not found.");
             if (acct.Key.Equals(accountKey)) return acct.Id;
             throw new Exception("Missing or invalid account key.");            
+        }
+
+        protected string BaseUrl(string append)
+        {
+            var uri = new Uri(Request.GetDisplayUrl());
+            return uri.GetLeftPart(UriPartial.Authority) + append;
         }
     }
 }

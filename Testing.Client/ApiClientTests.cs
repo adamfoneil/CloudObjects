@@ -37,17 +37,26 @@ namespace Testing
             }
         }
 
-        private async Task<Account> InitTestAccountAsync()
+        private async Task<Account> GetTestAccountAsync()
         {
-            var client = new CloudObjectsClient(Host.Local);
-            var account = await client.CreateAccountAsync(testAccount);
-            return account;
+            using (var cn = ConfigHelper.GetConnection())
+            {
+                Account result = await cn.QuerySingleOrDefaultAsync<Account>("SELECT * FROM [dbo].[Account] WHERE [Name]=@testAccount", new { testAccount });
+
+                if (result == null)
+                {
+                    var client = new CloudObjectsClient(Host.Local);
+                    result = await client.CreateAccountAsync(testAccount);
+                }
+
+                return result;
+            }            
         }
 
         [TestMethod]
         public void CreateAccount()
         {
-            var account = InitTestAccountAsync().Result;            
+            var account = GetTestAccountAsync().Result;            
 
             var client = new CloudObjectsClient(Host.Local, new ApiCredentials(account.Name, account.Key));
             client.DeleteAccountAsync().Wait();
@@ -56,15 +65,33 @@ namespace Testing
         [TestMethod]
         public void CreateObject()
         {
-            var account = InitTestAccountAsync().Result;
+            var account = GetTestAccountAsync().Result;
             var client = new CloudObjectsClient(Host.Local, account.Name, account.Key);
 
-            var obj = client.CreateObjectAsync("object1", new SampleObject()
+            var obj = client.CreateAsync("object1", new SampleObject()
             {
                 FirstName = "nobody",
                 LastName = "anyone",
                 Address = "343 Whatever St"
             }).Result;
+        }
+
+        [TestMethod]
+        public void UpdateObject()
+        {
+            var account = GetTestAccountAsync().Result;
+            var client = new CloudObjectsClient(Host.Local, account.Name, account.Key);
+
+            var obj = client.CreateAsync("object2", new SampleObject()
+            {
+                FirstName = "nobody",
+                LastName = "anyone",
+                Address = "343 Whatever St"
+            }).Result;
+
+            obj.Object.FirstName = "anyone";
+            var result = client.UpdateAsync(obj).Result;
+            Assert.IsTrue(result.Object.FirstName.Equals("anyone"));
         }
 
         public class SampleObject

@@ -2,6 +2,7 @@
 using AO.Models.Interfaces;
 using Dapper.CX.SqlServer.Extensions.Long;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Threading.Tasks;
 
@@ -10,6 +11,9 @@ namespace CloudObjects.Models.Conventions
     public abstract partial class AuditedTable : IAudit, ITrigger
     {
         public abstract bool TrackDeletions { get; }
+        
+        [NotMapped]
+        public string Url { get; set; }
 
         public async Task RowDeletedAsync(IDbConnection connection, IDbTransaction txn = null, IUserBase user = null)
         {

@@ -20,7 +20,7 @@ namespace CloudObjects.Models
         public string Json { get; set; }
 
         public long Length { get; set; }
-
+        
         public override long AuditAccountId => AccountId;
 
         public override long AuditObjectId => Id;
