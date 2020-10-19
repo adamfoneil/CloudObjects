@@ -19,7 +19,7 @@ var obj = await client.GetAsync<Something>("my stuff/object1");
 ## My Approach
 My solution has three core projects:
 - [CloudObjects.App](https://github.com/adamfoneil/CloudObjects/tree/master/CloudObjects.App) a .NET Core web app using the API template. This uses a SQL Server backend and my [Dapper.CX](https://github.com/adamfoneil/Dapper.CX) project for all the data operations.
-- [CloudObjects.Client](https://github.com/adamfoneil/CloudObjects/tree/master/CloudObjects.Client) the NuGet package, the part you'd install and use in your programs.
+- [CloudObjects.Client](https://github.com/adamfoneil/CloudObjects/tree/master/CloudObjects.Client) the NuGet package, the part you'd install and use in your programs. At the moment I do not have a package you can install yet.
 - [CloudObjects.Models](https://github.com/adamfoneil/CloudObjects/tree/master/CloudObjects.Models) the model classes shared by the App and Client projects.
 
 ### Note about linked source files
