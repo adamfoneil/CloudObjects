@@ -5,11 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\CloudObjects.Models\Account.cs" Link="Models\Server\Account.cs" />
+    <Compile Include="..\CloudObjects.Models\Activity.cs" Link="Models\Server\Activity.cs" />
+    <Compile Include="..\CloudObjects.Models\Conventions\AuditedTable.cs" Link="Models\Server\Conventions\AuditedTable.cs" />
+    <Compile Include="..\CloudObjects.Models\Conventions\BaseTable.cs" Link="Models\Server\Conventions\BaseTable.cs" />
+    <Compile Include="..\CloudObjects.Models\StoredObject.cs" Link="Models\Server\StoredObject.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AO.Models" Version="1.1.20" />
     <PackageReference Include="Refit" Version="5.2.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CloudObjects.Models\CloudObjects.Models.csproj" />
+    <Folder Include="Models\Server\Conventions\" />
   </ItemGroup>
 
 </Project>
