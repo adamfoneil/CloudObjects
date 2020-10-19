@@ -15,6 +15,8 @@ await client.CreateAsync("my stuff/object1", new Something()
 // get object from cloud
 var obj = await client.GetAsync<Something>("my stuff/object1");
 ```
+I have an instance running here: [CloudObjects](https://cloudobjects.azurewebsites.net/). This is a bare-minimum work in progress at the moment, but it does do some stuff now.
+
 
 ## My Approach
 My solution has three core projects:
