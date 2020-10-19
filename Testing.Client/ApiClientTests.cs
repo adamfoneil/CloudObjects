@@ -1,13 +1,15 @@
 ﻿using CloudObjects.Client;
 using CloudObjects.Client.Models;
+using CloudObjects.Models;
 using Dapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
 using Testing.Static;
 
 namespace Testing
 {
     /// <summary>
-    /// before running, launch an instance of CloudObjects.App locally without debugger (Ctrl+F5)
+    /// before running, launch an instance of CloudObjects.App locally without debugger (set as startup, then Ctrl+F5)
     /// </summary>
     [TestClass]
     public class ApiClientTests
@@ -35,21 +37,41 @@ namespace Testing
             }
         }
 
+        private async Task<Account> InitTestAccountAsync()
+        {
+            var client = new CloudObjectsClient(Host.Local);
+            var account = await client.CreateAccountAsync(testAccount);
+            return account;
+        }
+
         [TestMethod]
         public void CreateAccount()
         {
-            var client = new CloudObjectsClient(Host.Local);
-            var account = client.CreateAccountAsync(testAccount).Result;
+            var account = InitTestAccountAsync().Result;            
 
-            client = new CloudObjectsClient(Host.Local, new ApiCredentials(account.Name, account.Key));
+            var client = new CloudObjectsClient(Host.Local, new ApiCredentials(account.Name, account.Key));
             client.DeleteAccountAsync().Wait();
         }
 
         [TestMethod]
         public void CreateObject()
         {
-            var client = new CloudObjectsClient(Host.Local);
-            var account = client.CreateAccountAsync(testAccount).Result;
+            var account = InitTestAccountAsync().Result;
+            var client = new CloudObjectsClient(Host.Local, account.Name, account.Key);
+
+            var obj = client.CreateObjectAsync("object1", new SampleObject()
+            {
+                FirstName = "nobody",
+                LastName = "anyone",
+                Address = "343 Whatever St"
+            }).Result;
+        }
+
+        public class SampleObject
+        {
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string Address { get; set; }
         }
     }
 }

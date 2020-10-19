@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudObjects.Models", "Clou
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudObjects.App", "CloudObjects.App\CloudObjects.App.csproj", "{D395A1B6-4ECD-44A2-9EE8-EFA7334896F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing", "Testing\Testing.csproj", "{76E07B9B-FCA4-4AC3-AEBC-85CCE0750DEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudObjects.Client", "CloudObjects.Client\CloudObjects.Client.csproj", "{42849B17-6EF8-4C19-B75F-B0AD7792E585}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObjects.Client", "CloudObjects.Client\CloudObjects.Client.csproj", "{42849B17-6EF8-4C19-B75F-B0AD7792E585}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing.Client", "Testing.Client\Testing.Client.csproj", "{F93CDA80-9D3E-4067-B72A-9BA185479AC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.App", "Testing.App\Testing.App.csproj", "{BDF6C0EA-EFB2-4B69-B24A-B7D5198337A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +27,18 @@ Global
 		{D395A1B6-4ECD-44A2-9EE8-EFA7334896F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D395A1B6-4ECD-44A2-9EE8-EFA7334896F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D395A1B6-4ECD-44A2-9EE8-EFA7334896F9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{76E07B9B-FCA4-4AC3-AEBC-85CCE0750DEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76E07B9B-FCA4-4AC3-AEBC-85CCE0750DEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76E07B9B-FCA4-4AC3-AEBC-85CCE0750DEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76E07B9B-FCA4-4AC3-AEBC-85CCE0750DEA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{42849B17-6EF8-4C19-B75F-B0AD7792E585}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{42849B17-6EF8-4C19-B75F-B0AD7792E585}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42849B17-6EF8-4C19-B75F-B0AD7792E585}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42849B17-6EF8-4C19-B75F-B0AD7792E585}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F93CDA80-9D3E-4067-B72A-9BA185479AC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F93CDA80-9D3E-4067-B72A-9BA185479AC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F93CDA80-9D3E-4067-B72A-9BA185479AC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F93CDA80-9D3E-4067-B72A-9BA185479AC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDF6C0EA-EFB2-4B69-B24A-B7D5198337A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDF6C0EA-EFB2-4B69-B24A-B7D5198337A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDF6C0EA-EFB2-4B69-B24A-B7D5198337A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDF6C0EA-EFB2-4B69-B24A-B7D5198337A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -25,9 +25,17 @@ namespace CloudObjects.Client
             [Host.Online] = "https://cloudobjects.azurewebsites.net"
         };
 
-        public CloudObjectsClient(Host hostLocation, ApiCredentials credentials = null)
+        public CloudObjectsClient(string accountName, string accountKey) : this(Host.Online, new ApiCredentials(accountName, accountKey))
         {
-            Host = hostLocation;
+        }
+
+        public CloudObjectsClient(Host host, string accountName, string accountKey) : this(host, new ApiCredentials(accountName, accountKey))
+        {
+        }                
+
+        public CloudObjectsClient(Host host, ApiCredentials credentials = null)
+        {
+            Host = host;
             _api = RestService.For<ICloudObjects>(_urls[Host]);
             _credentials = credentials;
         }

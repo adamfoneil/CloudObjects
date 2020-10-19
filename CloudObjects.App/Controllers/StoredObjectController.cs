@@ -18,10 +18,22 @@ namespace CloudObjects.App.Controllers
         [HttpPost]
         [Route("api/[controller]/{accountName}")]
         public async Task<IActionResult> Post([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, StoredObject model) =>
-            await TryAny(async () =>
+            await TryOnVerified(accountName, accountKey, async (acctId) =>
             {
-                await PreSaveInner(accountName, accountKey, model);
+                model.AccountId = acctId;
+                model.Length = model.Json.Length;                
                 await Data.InsertAsync(model);
+                return model;
+            });
+
+        [HttpPut]
+        [Route("api/[controller]/{accountName}")]
+        public async Task<IActionResult> Put([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, StoredObject model) =>
+            await TryOnVerified(accountName, accountKey, async (acctId) =>
+            {
+                model.AccountId = acctId;
+                model.Length = model.Json.Length;
+                await Data.MergeAsync(model);
                 return model;
             });
 
@@ -55,16 +67,6 @@ namespace CloudObjects.App.Controllers
                 return await Data.QueryAsync(query);
             });
 
-        [HttpPut]
-        [Route("api/[controller]/{accountName}")]
-        public async Task<IActionResult> Put([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, StoredObject model) =>
-            await TryOnVerified(accountName, accountKey, async (acctId) =>
-            {
-                await PreSaveInner(accountName, accountKey, model);
-                await Data.MergeAsync(model);
-                return model;
-            });
-
         [HttpDelete]
         [Route("api/[controller]/{accountName}/id")]
         public async Task<IActionResult> DeleteById([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, long id) =>
@@ -87,12 +89,5 @@ namespace CloudObjects.App.Controllers
                 await Data.DeleteAsync<StoredObject>(result.Id);
                 return true;
             });
-
-        private async Task PreSaveInner(string accountName, string accountKey, StoredObject model)
-        {
-            var acctId = await VerifyAccountIdAsync(accountName, accountKey);
-            model.AccountId = acctId;
-            model.Length = model.Json.Length;
-        }
     }
 }
