@@ -26,6 +26,8 @@ namespace CloudObjects.App
             string connectionString = Configuration.GetConnectionString("Default");
             services.AddDapperCX(connectionString, (id) => Convert.ToInt64(id));
 
+            services.AddMvc();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CloudObjects API", Version = "v1" });
@@ -49,6 +51,7 @@ namespace CloudObjects.App
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapDefaultControllerRoute();
             });
 
             app.UseSwagger();

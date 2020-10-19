@@ -3,13 +3,12 @@ using CloudObjects.Client.Models;
 using CloudObjects.Models;
 using Refit;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CloudObjects.Client
 {
-    public enum HostLocation
+    public enum Host
     {
         Local,
         Online
@@ -20,20 +19,20 @@ namespace CloudObjects.Client
         private readonly ICloudObjects _api = null;
         private readonly ApiCredentials _credentials = null;
 
-        private static Dictionary<HostLocation, string> _urls = new Dictionary<HostLocation, string>()
+        private static Dictionary<Host, string> _urls = new Dictionary<Host, string>()
         {
-            [HostLocation.Local] = "https://localhost:44328",
-            [HostLocation.Online] = "https://cloudobjects.azurewebsites.net"
+            [Host.Local] = "https://localhost:44328",
+            [Host.Online] = "https://cloudobjects.azurewebsites.net"
         };
 
-        public CloudObjectsClient(HostLocation hostLocation, ApiCredentials credentials = null)
+        public CloudObjectsClient(Host hostLocation, ApiCredentials credentials = null)
         {
-            HostLocation = hostLocation;
-            _api = RestService.For<ICloudObjects>(_urls[HostLocation]);
+            Host = hostLocation;
+            _api = RestService.For<ICloudObjects>(_urls[Host]);
             _credentials = credentials;
         }
 
-        public HostLocation HostLocation { get; }
+        public Host Host { get; }
 
         public async Task<Account> CreateAccountAsync(string name) => await _api.CreateAccountAsync(name);
 

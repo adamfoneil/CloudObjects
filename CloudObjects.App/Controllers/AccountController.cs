@@ -33,23 +33,23 @@ namespace CloudObjects.App.Controllers
 
         [HttpPut]
         [Route("api/[controller]/{accountName}")]
-        public async Task<IActionResult> Put([FromRoute]string accountName, [FromQuery(Name = "key")]string accountKey, Account account) => await DataActionAsync(account, async () =>
-        {
-            var acctId = await VerifyAccountId(accountName, accountKey);
-            if (account.Id == 0) account.Id = acctId;            
-            await Data.UpdateAsync(account);
-            return account;                                    
-        });
+        public async Task<IActionResult> Put([FromRoute]string accountName, [FromQuery(Name = "key")]string accountKey, Account account) => 
+            await TryOnVerified(accountName, accountKey, async (acctId) =>
+            {            
+                if (account.Id == 0) account.Id = acctId;
+                await Data.UpdateAsync(account);
+                return account;
+            });
 
         [HttpDelete]
         [Route("api/[controller]/{accountName}")]
-        public async Task<IActionResult> Delete([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey)
-        {
-            var acctId = await VerifyAccountId(accountName, accountKey);
-            await Data.QueryAsync(new DeleteAccountActivity() { AccountId = acctId });
-            await Data.DeleteAsync<Account>(acctId);
-            return Ok();
-        }
+        public async Task<IActionResult> Delete([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey) =>
+            await TryOnVerified(accountName, accountKey, async (acctId) =>
+            {
+                await Data.QueryAsync(new DeleteAccountActivity() { AccountId = acctId });
+                await Data.DeleteAsync<Account>(acctId);
+                return true;
+            });
 
         private static string GetKey()
         {

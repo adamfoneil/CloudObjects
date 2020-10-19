@@ -13,11 +13,17 @@ namespace Testing
         [TestMethod]
         public void CreateAccount()
         {
-            var client = new CloudObjectsClient(HostLocation.Local);
+            var client = new CloudObjectsClient(Host.Local);
             var account = client.CreateAccountAsync("sample1238").Result;
 
-            client = new CloudObjectsClient(HostLocation.Local, new ApiCredentials(account.Name, account.Key));
+            client = new CloudObjectsClient(Host.Local, new ApiCredentials(account.Name, account.Key));
             client.DeleteAccountAsync().Wait();
+        }
+
+        [TestMethod]
+        public void CreateObject()
+        {
+
         }
     }
 }

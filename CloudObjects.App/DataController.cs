@@ -16,7 +16,21 @@ namespace CloudObjects.App
 
         public DapperCX<long, SystemUser> Data { get; }
 
-        protected async Task<IActionResult> DataActionAsync<T>(T model, Func<Task<object>> action)
+        protected async Task<IActionResult> TryOnVerified(string accountName, string accountKey, Func<long, Task<object>> action)
+        {
+            try
+            {
+                var acctId = await VerifyAccountId(accountName, accountKey);
+                var result = await action.Invoke(acctId);
+                return Ok(result);
+            }
+            catch (Exception exc)
+            {
+                return BadRequest(exc.Message);
+            }
+        }
+
+        protected async Task<IActionResult> TryAny(Func<Task<object>> action)
         {
             try
             {
