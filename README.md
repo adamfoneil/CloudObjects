@@ -17,6 +17,8 @@ var obj = await client.GetAsync<Something>("my stuff/object1");
 ```
 I have an instance running here: [CloudObjects](https://cloudobjects.azurewebsites.net/). This is a bare-minimum work in progress at the moment, but it does do some stuff now.
 
+So, this is very reminiscent of things like MongoDB, Redis, Azure Cosmos DB. As usual, this is simply something I like working on.
+
 
 ## My Approach
 My solution has three core projects:
