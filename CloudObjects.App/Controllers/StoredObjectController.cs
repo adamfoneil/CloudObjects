@@ -90,7 +90,7 @@ namespace CloudObjects.App.Controllers
 
         private async Task PreSaveInner(string accountName, string accountKey, StoredObject model)
         {
-            var acctId = await VerifyAccountId(accountName, accountKey);
+            var acctId = await VerifyAccountIdAsync(accountName, accountKey);
             model.AccountId = acctId;
             model.Length = model.Json.Length;
         }

@@ -14,10 +14,10 @@ namespace CloudObjects.App.Queries
 
         public long AccountId { get; set; }
 
-        [Where("[Name] LIKE CONCAT('%', @namedLike, '%')")]
+        [Where("[Name] LIKE CONCAT('%', @nameContains, '%')")]
         public string NameContains { get; set; }
 
-        [Where("[Name] LIKE CONCAT(@namedLike, '%')")]
+        [Where("[Name] LIKE CONCAT(@nameStartsWith, '%')")]
         public string NameStartsWith { get; set; }
 
         [Offset(50)]

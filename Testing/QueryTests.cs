@@ -16,7 +16,7 @@ namespace Testing
         private IDbConnection GetConnection() => new SqlConnection(GetConfig().GetConnectionString("Default"));
 
         private IConfigurationRoot GetConfig() => new ConfigurationBuilder()
-            .AddJsonFile("connection.json")
+            .AddJsonFile("Config/connection.json")
             .Build();
     }
 }

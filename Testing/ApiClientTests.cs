@@ -10,11 +10,19 @@ namespace Testing
     [TestClass]
     public class ApiClientTests
     {
+        const string testAccount = "sample1238";
+
+        [ClassInitialize]
+        public static void Initialize(TestContext context)
+        {
+
+        }
+
         [TestMethod]
         public void CreateAccount()
         {
             var client = new CloudObjectsClient(Host.Local);
-            var account = client.CreateAccountAsync("sample1238").Result;
+            var account = client.CreateAccountAsync(testAccount).Result;
 
             client = new CloudObjectsClient(Host.Local, new ApiCredentials(account.Name, account.Key));
             client.DeleteAccountAsync().Wait();
@@ -23,7 +31,8 @@ namespace Testing
         [TestMethod]
         public void CreateObject()
         {
-
+            var client = new CloudObjectsClient(Host.Local);
+            var account = client.CreateAccountAsync(testAccount).Result;
         }
     }
 }
