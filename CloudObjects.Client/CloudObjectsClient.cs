@@ -54,31 +54,18 @@ namespace CloudObjects.Client
                 Json = JsonSerializer.Serialize(@object)
             });
 
-            return GetCloudObject(@object, result);
+            return new CloudObject<T>(@object, result);
         }
 
-        public async Task<CloudObject<T>> UpdateAsync<T>(CloudObject<T> @object)
+        public async Task<CloudObject<T>> SaveAsync<T>(string name, T @object)
         {
-            var result = await _api.UpdateObjectAsync(_credentials, new StoredObject()
+            var result = await _api.SaveObjectAsync(_credentials, new StoredObject()
             {
-                Name = @object.Name,
-                Json = JsonSerializer.Serialize(@object.Object)
+                Name = name,
+                Json = JsonSerializer.Serialize(@object)
             });
 
-            return GetCloudObject(@object.Object, result);
-        }
-
-        private static CloudObject<T> GetCloudObject<T>(T @object, StoredObject result)
-        {
-            return new CloudObject<T>()
-            {
-                Object = @object,
-                Name = result.Name,
-                Id = result.Id,
-                DateCreated = result.DateCreated,
-                DateModified = result.DateModified,
-                Length = result.Length,
-            };
+            return new CloudObject<T>(@object, result);
         }
     }
 }

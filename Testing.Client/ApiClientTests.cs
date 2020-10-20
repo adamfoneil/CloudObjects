@@ -90,8 +90,33 @@ namespace Testing
             }).Result;
 
             obj.Object.FirstName = "anyone";
-            var result = client.UpdateAsync(obj).Result;
+            var result = client.SaveAsync("object2", obj.Object).Result;
             Assert.IsTrue(result.Object.FirstName.Equals("anyone"));
+        }
+
+        [TestMethod]
+        public void SaveObject()
+        {
+            var account = GetTestAccountAsync().Result;
+            var client = new CloudObjectsClient(Host.Local, account.Name, account.Key);
+
+            var sample = new SampleObject()
+            {
+                FirstName = "whoosie",
+                LastName = "whatsie",
+                Address = "887 yodalay"
+            };
+
+            var obj = client.SaveAsync("object3", sample).Result;
+
+            Assert.IsTrue(obj.Id != 0);
+            Assert.IsTrue(obj.Object.LastName.Equals("whatsie"));
+
+            sample.FirstName = "yiminy";
+            var updated = client.SaveAsync("object3", sample).Result;
+
+            Assert.IsTrue(updated.Id == obj.Id);
+            Assert.IsTrue(sample.FirstName.Equals(updated.Object.FirstName));
         }
 
         public class SampleObject

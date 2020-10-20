@@ -20,6 +20,6 @@ namespace CloudObjects.Client.Interfaces
         Task<StoredObject> CreateObjectAsync(ApiCredentials credentials, [Body]StoredObject @object);
 
         [Put("/api/Object/{credentials.AccountName}?key={credentials.AccountKey}")]
-        Task<StoredObject> UpdateObjectAsync(ApiCredentials credentials, [Body]StoredObject @object);
+        Task<StoredObject> SaveObjectAsync(ApiCredentials credentials, [Body]StoredObject @object);
     }
 }
