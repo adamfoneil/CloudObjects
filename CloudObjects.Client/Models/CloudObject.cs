@@ -1,10 +1,17 @@
 ﻿using CloudObjects.Models;
 using System;
+using System.Text.Json;
 
 namespace CloudObjects.Client.Models
 {
     public class CloudObject<T>
     {
+        public static CloudObject<T> FromStoredObject(StoredObject storedObject)
+        {
+            var obj = JsonSerializer.Deserialize<T>(storedObject.Json);
+            return new CloudObject<T>(obj, storedObject);
+        }
+
         public CloudObject(T @object, StoredObject storedObject)
         {
             Object = @object;

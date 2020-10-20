@@ -3,6 +3,7 @@ using CloudObjects.Client.Models;
 using CloudObjects.Models;
 using Refit;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -66,6 +67,12 @@ namespace CloudObjects.Client
             });
 
             return new CloudObject<T>(@object, result);
+        }
+
+        public async Task<IEnumerable<CloudObject<T>>> ListAsync<T>(ListObjectsQuery query)
+        {
+            var results = await _api.ListObjectsAsync(_credentials, query);
+            return results.Select(storedObj => CloudObject<T>.FromStoredObject(storedObj));
         }
     }
 }

@@ -59,7 +59,7 @@ namespace CloudObjects.App.Controllers
                 return result;
             });
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/[controller]/{accountName}/list")]
         public async Task<IActionResult> List([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, ListStoredObjects query) =>
             await TryOnVerified(accountName, accountKey, async (acctId) =>

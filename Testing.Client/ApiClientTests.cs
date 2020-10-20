@@ -3,6 +3,7 @@ using CloudObjects.Client.Models;
 using CloudObjects.Models;
 using Dapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using System.Threading.Tasks;
 using Testing.Static;
 
@@ -56,17 +57,14 @@ namespace Testing
         [TestMethod]
         public void CreateAccount()
         {
-            var account = GetTestAccountAsync().Result;            
-
-            var client = new CloudObjectsClient(Host.Local, new ApiCredentials(account.Name, account.Key));
+            var client = GetClient();
             client.DeleteAccountAsync().Wait();
         }
 
         [TestMethod]
         public void CreateObject()
         {
-            var account = GetTestAccountAsync().Result;
-            var client = new CloudObjectsClient(Host.Local, account.Name, account.Key);
+            var client = GetClient();
 
             var obj = client.CreateAsync("object1", new SampleObject()
             {
@@ -79,8 +77,7 @@ namespace Testing
         [TestMethod]
         public void UpdateObject()
         {
-            var account = GetTestAccountAsync().Result;
-            var client = new CloudObjectsClient(Host.Local, account.Name, account.Key);
+            var client = GetClient();
 
             var obj = client.CreateAsync("object2", new SampleObject()
             {
@@ -97,8 +94,7 @@ namespace Testing
         [TestMethod]
         public void SaveObject()
         {
-            var account = GetTestAccountAsync().Result;
-            var client = new CloudObjectsClient(Host.Local, account.Name, account.Key);
+            CloudObjectsClient client = GetClient();
 
             var sample = new SampleObject()
             {
@@ -117,6 +113,44 @@ namespace Testing
 
             Assert.IsTrue(updated.Id == obj.Id);
             Assert.IsTrue(sample.FirstName.Equals(updated.Object.FirstName));
+        }
+
+        private CloudObjectsClient GetClient()
+        {
+            var account = GetTestAccountAsync().Result;
+            var client = new CloudObjectsClient(Host.Local, account.Name, account.Key);
+            return client;
+        }
+
+        [TestMethod]
+        public void ListObjects()
+        {
+            var client = GetClient();
+
+            for (int i = 0; i < 65; i++)
+            {
+                client.SaveAsync($"list/object{i}", new SampleObject()
+                {
+                    FirstName = $"first-name{i}",
+                    LastName = $"last-name{i}"
+                }).Wait();
+            }
+
+            var page1 = client.ListAsync<SampleObject>(new ListObjectsQuery()
+            {
+                NameStartsWith = "list/",
+                Page = 0
+            }).Result;
+
+            Assert.IsTrue(page1.Count() == 50);
+
+            var page2 = client.ListAsync<SampleObject>(new ListObjectsQuery()
+            {
+                NameStartsWith = "list/",
+                Page = 1
+            }).Result;
+
+            Assert.IsTrue(page2.Count() == 15);
         }
 
         public class SampleObject
