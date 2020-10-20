@@ -13,7 +13,7 @@ namespace CloudObjects.Models
 
         public ValidateResult Validate()
         {
-            var specialChars = "?!@#$%^&*()+=;\"".ToCharArray();
+            var specialChars = "?!@#$%^'|&*()+=;\"".ToCharArray();
 
             return (Uri.IsWellFormedUriString(Name, UriKind.Relative) && !ContainsAny(Name, specialChars)) ? 
                 ValidateResult.Ok() : 
