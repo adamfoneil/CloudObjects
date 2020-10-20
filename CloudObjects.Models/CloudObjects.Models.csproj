@@ -4,8 +4,4 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AO.Models" Version="1.1.20" />
-  </ItemGroup>
-
 </Project>
