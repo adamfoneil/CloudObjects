@@ -153,6 +153,40 @@ namespace Testing
             Assert.IsTrue(page2.Count() == 15);
         }
 
+        [TestMethod]
+        public void GetById()
+        {
+            var client = GetClient();
+
+            var obj = client.SaveAsync("test/hello", new SampleObject()
+            {
+                FirstName = "yessee",
+                LastName = "whoopsie"
+            }).Result;
+
+            var fetched = client.GetAsync<SampleObject>(obj.Id).Result;
+            Assert.IsTrue(obj.Object.FirstName.Equals(fetched.Object.FirstName));
+            Assert.IsTrue(obj.Object.LastName.Equals(fetched.Object.LastName));
+            Assert.IsTrue(obj.Id == fetched.Id);
+        }
+
+        [TestMethod]
+        public void GetByName()
+        {
+            var client = GetClient();
+
+            var obj = client.SaveAsync("test/hello", new SampleObject()
+            {
+                FirstName = "yessee",
+                LastName = "whoopsie"
+            }).Result;
+
+            var fetched = client.GetAsync<SampleObject>(obj.Name).Result;
+            Assert.IsTrue(obj.Object.FirstName.Equals(fetched.Object.FirstName));
+            Assert.IsTrue(obj.Object.LastName.Equals(fetched.Object.LastName));
+            Assert.IsTrue(obj.Id == fetched.Id);
+        }
+
         public class SampleObject
         {
             public string FirstName { get; set; }

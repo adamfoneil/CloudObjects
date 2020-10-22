@@ -9,7 +9,7 @@
     <Description>API client for CloudObjects service -- https://cloudobjects.azurewebsites.net</Description>
     <PackageProjectUrl>https://cloudobjects.azurewebsites.net/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/adamfoneil/CloudObjects</RepositoryUrl>
-    <Version>0.9.0-beta</Version>
+    <Version>0.9.1-beta</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 

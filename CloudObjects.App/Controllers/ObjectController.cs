@@ -5,9 +5,10 @@ using Dapper.CX.SqlServer.AspNetCore.Extensions;
 using Dapper.CX.SqlServer.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace CloudObjects.App.Controllers
-{    
+{
     [ApiController]
     public class ObjectController : DataController
     {
@@ -39,18 +40,19 @@ namespace CloudObjects.App.Controllers
             });
 
         [HttpGet]
-        [Route("api/[controller]/{accountName}/name")]
-        public async Task<IActionResult> GetByName([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, string name) =>
+        [Route("api/[controller]/{accountName}/name/{path}")]
+        public async Task<IActionResult> GetByName([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, [FromRoute]string path) =>
             await TryOnVerified(accountName, accountKey, async (acctId) =>
             {
+                var name = HttpUtility.UrlDecode(path);
                 var result = await Data.GetWhereAsync<StoredObject>(new { accountId = acctId, name });
                 if (result == null) return BadRequest();
                 return result;
             });
 
         [HttpGet]
-        [Route("api/[controller]/{accountName}/id")]
-        public async Task<IActionResult> GetById([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, long id) =>
+        [Route("api/[controller]/{accountName}/id/{id}")]
+        public async Task<IActionResult> GetById([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey, [FromRoute]long id) =>
             await TryOnVerified(accountName, accountKey, async (acctId) =>
             {
                 var result = await Data.GetAsync<StoredObject>(id);

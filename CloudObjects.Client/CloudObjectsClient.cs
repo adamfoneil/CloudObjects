@@ -74,5 +74,17 @@ namespace CloudObjects.Client
             var results = await _api.ListObjectsAsync(_credentials, query);
             return results.Select(storedObj => CloudObject<T>.FromStoredObject(storedObj));
         }
+
+        public async Task<CloudObject<T>> GetAsync<T>(long id)
+        {
+            var obj = await _api.GetByIdAsync(_credentials, id);
+            return CloudObject<T>.FromStoredObject(obj);
+        }
+
+        public async Task<CloudObject<T>> GetAsync<T>(string name)
+        {
+            var obj = await _api.GetByNameAsync(_credentials, name);
+            return CloudObject<T>.FromStoredObject(obj);
+        }
     }
 }

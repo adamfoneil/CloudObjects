@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\CloudObjects.App\Config\connection.json" Link="connection.json" />
+    <Content Include="..\CloudObjects.App\Config\connection.json" Link="Config\connection.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +26,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CloudObjects.Client\CloudObjects.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Config\" />
   </ItemGroup>
 
 </Project>

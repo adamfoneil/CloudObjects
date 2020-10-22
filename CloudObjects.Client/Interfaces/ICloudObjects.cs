@@ -31,5 +31,11 @@ namespace CloudObjects.Client.Interfaces
 
         [Post("/api/Object/{credentials.AccountName}/list?key={credentials.AccountKey}")]
         Task<IEnumerable<StoredObject>> ListObjectsAsync(ApiCredentials credentials, [Body]ListObjectsQuery query);
+
+        [Get("/api/Object/{credentials.AccountName}/id/{id}?key={credentials.AccountKey}")]
+        Task<StoredObject> GetByIdAsync(ApiCredentials credentials, long id);
+
+        [Get("/api/Object/{credentials.AccountName}/name/{name}?key={credentials.AccountKey}")]
+        Task<StoredObject> GetByNameAsync(ApiCredentials credentials, string name);
     }
 }
