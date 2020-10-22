@@ -6,9 +6,11 @@
     <PackageId>AO.CloudObjects.Client</PackageId>
     <Authors>Adam O'Neil</Authors>
     <Product>AO.CloudObjects.Client</Product>
-    <Description>API client for CloudObjects service</Description>
+    <Description>API client for CloudObjects service -- https://cloudobjects.azurewebsites.net</Description>
     <PackageProjectUrl>https://cloudobjects.azurewebsites.net/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/adamfoneil/CloudObjects</RepositoryUrl>
+    <Version>0.9.0-beta</Version>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +31,13 @@
   <ItemGroup>
     <Folder Include="Models\Server\Conventions\" />
     <Folder Include="Enums\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
