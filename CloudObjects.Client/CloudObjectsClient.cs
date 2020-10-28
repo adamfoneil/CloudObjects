@@ -1,5 +1,6 @@
 ﻿using CloudObjects.Client.Interfaces;
 using CloudObjects.Client.Models;
+using CloudObjects.Client.Static;
 using CloudObjects.Models;
 using Refit;
 using System.Collections.Generic;
@@ -9,39 +10,27 @@ using System.Threading.Tasks;
 
 namespace CloudObjects.Client
 {
-    public enum Host
-    {
-        Local,
-        Online
-    }
-
     public class CloudObjectsClient
     {
         private readonly ICloudObjects _api = null;
-        private readonly ApiCredentials _credentials = null;
+        private readonly ApiCredentials _credentials = null;        
 
-        private static Dictionary<Host, string> _urls = new Dictionary<Host, string>()
-        {
-            [Host.Local] = "https://localhost:44328",
-            [Host.Online] = "https://cloudobjects.azurewebsites.net"
-        };
-
-        public CloudObjectsClient(string accountName, string accountKey) : this(Host.Online, new ApiCredentials(accountName, accountKey))
+        public CloudObjectsClient(string accountName, string accountKey) : this(HostLocations.Online, new ApiCredentials(accountName, accountKey))
         {
         }
 
-        public CloudObjectsClient(Host host, string accountName, string accountKey) : this(host, new ApiCredentials(accountName, accountKey))
+        public CloudObjectsClient(HostLocations location, string accountName, string accountKey) : this(location, new ApiCredentials(accountName, accountKey))
         {
         }                
 
-        public CloudObjectsClient(Host host, ApiCredentials credentials = null)
+        public CloudObjectsClient(HostLocations location, ApiCredentials credentials = null)
         {
-            Host = host;
-            _api = RestService.For<ICloudObjects>(_urls[Host]);
+            HostLocation = location;
+            _api = RestService.For<ICloudObjects>(Host.Urls[location]);
             _credentials = credentials;
         }
 
-        public Host Host { get; }
+        public HostLocations HostLocation { get; }
 
         public async Task<Account> CreateAccountAsync(string name) => await _api.CreateAccountAsync(name);
 

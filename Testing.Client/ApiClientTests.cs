@@ -1,10 +1,13 @@
 ﻿using CloudObjects.Client;
 using CloudObjects.Client.Models;
+using CloudObjects.Client.Static;
 using CloudObjects.Models;
 using Dapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Threading.Tasks;
+using Testing.Client.Models;
+using Testing.Client.Static;
 using Testing.Static;
 
 namespace Testing
@@ -20,39 +23,8 @@ namespace Testing
         [ClassInitialize]
         public static void Initialize(TestContext context)
         {
-            using (var cn = ConfigHelper.GetConnection())
-            {
-                cn.Execute(
-                    @"DELETE [act] 
-                    FROM [dbo].[Activity] [act]
-                    INNER JOIN [dbo].[Account] [a] ON [act].[AccountId]=[a].[Id]
-                    WHERE [a].[Name]=@testAccount", new { testAccount });
-
-                cn.Execute(
-                    @"DELETE [so]
-                    FROM [dbo].[StoredObject] [so]
-                    INNER JOIN [dbo].[Account] [a] ON [so].[AccountId]=[a].[Id]
-                    WHERE [a].[Name]=@testAccount", new { testAccount });
-
-                cn.Execute("DELETE [a] FROM [dbo].[Account] [a] WHERE [Name]=@testAccount", new { testAccount });
-            }
-        }
-
-        private async Task<Account> GetTestAccountAsync()
-        {
-            using (var cn = ConfigHelper.GetConnection())
-            {
-                Account result = await cn.QuerySingleOrDefaultAsync<Account>("SELECT * FROM [dbo].[Account] WHERE [Name]=@testAccount", new { testAccount });
-
-                if (result == null)
-                {
-                    var client = new CloudObjectsClient(Host.Local);
-                    result = await client.CreateAccountAsync(testAccount);
-                }
-
-                return result;
-            }            
-        }
+            DbUtil.DeleteAccount(testAccount, ConfigHelper.GetConnection);
+        }        
 
         [TestMethod]
         public void CreateAccount()
@@ -117,8 +89,8 @@ namespace Testing
 
         private CloudObjectsClient GetClient()
         {
-            var account = GetTestAccountAsync().Result;
-            var client = new CloudObjectsClient(Host.Local, account.Name, account.Key);
+            var account = DbUtil.GetTestAccountAsync(testAccount, ConfigHelper.GetConnection).Result;
+            var client = new CloudObjectsClient(HostLocations.Local, account.Name, account.Key);
             return client;
         }
 
@@ -185,13 +157,6 @@ namespace Testing
             Assert.IsTrue(obj.Object.FirstName.Equals(fetched.Object.FirstName));
             Assert.IsTrue(obj.Object.LastName.Equals(fetched.Object.LastName));
             Assert.IsTrue(obj.Id == fetched.Id);
-        }
-
-        public class SampleObject
-        {
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
-            public string Address { get; set; }
-        }
+        }        
     }
 }

@@ -7,14 +7,20 @@ using System.Threading.Tasks;
 
 namespace CloudObjects.Client.Interfaces
 {
+    internal interface ICloudObjectsToken
+    {
+        /// <summary>
+        /// needs to be a separate interface because we can't require a token before we have a token!
+        /// </summary>
+        [Post("/api/Account/Token")]
+        Task<string> GetTokenAsync([Body] ApiCredentials login);
+    }
+
     [Headers("Authorization: Bearer")]
-    public interface ICloudObjectsAuth
+    internal interface ICloudObjectsAuth
     {
         [Post("/api/Account")]
         Task<Account> CreateAccountAsync(string name);
-
-        [Get("/api/Account/Token")]
-        Task<string> GetTokenAsync([Body] ApiCredentials login);
 
         [Post("/api/Objects/")]
         Task<StoredObject> CreateAsync([Body] StoredObject @object);
