@@ -1,4 +1,7 @@
+using CloudObjects.App.Services;
+using Dapper.CX.Classes;
 using Dapper.CX.SqlServer.AspNetCore;
+using Dapper.CX.SqlServer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,10 +28,18 @@ namespace CloudObjects.App
         {
             services.AddControllers();
 
-            string connectionString = Configuration.GetConnectionString("Default");
+            var connectionString = Configuration.GetConnectionString("Default");
+            
+
             services.AddDapperCX(connectionString, (id) => Convert.ToInt64(id));
 
             services.AddMvc();
+            services.AddScoped((sp) =>
+            {
+                var jwtSecret = Configuration["Jwt:Secret"];
+                var data = sp.GetRequiredService<DapperCX<int, SystemUser>>();
+                return new TokenGenerator(jwtSecret, data);
+            });
 
             services.AddSwaggerGen(c =>
             {
