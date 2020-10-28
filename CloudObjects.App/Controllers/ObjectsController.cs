@@ -7,6 +7,7 @@ using Dapper.CX.SqlServer.AspNetCore.Extensions;
 using Dapper.CX.SqlServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -20,9 +21,11 @@ namespace CloudObjects.App.Controllers
     {      
         private readonly long _accountId;
 
-        public ObjectsController(DapperCX<long, SystemUser> data) : base(data)
+        public ObjectsController(   
+            HttpContext httpContext,
+            DapperCX<long, SystemUser> data) : base(data)
         {            
-            _accountId = this.GetClaim(TokenGenerator.AccountIdClaim, (value) => Convert.ToInt64(value));
+            _accountId = httpContext.GetClaim(TokenGenerator.AccountIdClaim, (value) => Convert.ToInt64(value));
         }
 
         [HttpPost]

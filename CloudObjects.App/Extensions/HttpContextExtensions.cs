@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,12 +6,12 @@ using System.Security.Claims;
 
 namespace CloudObjects.App.Extensions
 {
-    public static class ControllerExtensions
+    public static class HttpContextExtensions
     {
-        public static T GetClaim<T>(this ControllerBase controller, string claimName, Func<string, T> convert, Func<IEnumerable<Claim>, Claim> claimSelector = null)
+        public static T GetClaim<T>(this HttpContext context, string claimName, Func<string, T> convert, Func<IEnumerable<Claim>, Claim> claimSelector = null)
         {
             // claims aren't unique by type, but grouping them by type is a good first step to finding one we want
-            var claimsLookup = controller.User.Claims.ToLookup(item => item.Type);
+            var claimsLookup = context.User.Claims.ToLookup(item => item.Type);
 
             // how do we pick from possible duplicate claim types?
             // in the absence of an explicit rule, we'll simply take the first

@@ -1,3 +1,4 @@
+using CloudObjects.App.Extensions;
 using CloudObjects.App.Services;
 using Dapper.CX.Classes;
 using Dapper.CX.SqlServer.AspNetCore;
@@ -5,6 +6,7 @@ using Dapper.CX.SqlServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,15 +35,13 @@ namespace CloudObjects.App
             var connectionString = Configuration.GetConnectionString("Default");
             var jwtSecret = Configuration["Jwt:Secret"];
 
+            services.AddHttpContextAccessor();
             services.AddDapperCX(connectionString, (id) => Convert.ToInt64(id));
 
             services.AddMvc();
-            services.AddScoped((sp) =>
-            {                
-                var data = sp.GetRequiredService<DapperCX<long, SystemUser>>();
-                return new TokenGenerator(jwtSecret, data);
-            });
-
+            services.AddTokenGenerator(jwtSecret);
+            services.AddHttpContext();
+            
             services.AddSwaggerGen(c =>
             {
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
