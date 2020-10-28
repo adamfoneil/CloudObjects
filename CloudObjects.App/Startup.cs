@@ -2,6 +2,7 @@ using CloudObjects.App.Services;
 using Dapper.CX.Classes;
 using Dapper.CX.SqlServer.AspNetCore;
 using Dapper.CX.SqlServer.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -68,7 +69,11 @@ namespace CloudObjects.App
             });
 
             services
-                .AddAuthentication()
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(options =>
                 {                    
                     options.RequireHttpsMetadata = false;
@@ -94,6 +99,7 @@ namespace CloudObjects.App
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
             app.UseAuthorization();
 
