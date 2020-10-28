@@ -4,12 +4,14 @@ using Dapper.CX.SqlServer.Extensions.Long;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CloudObjects.Models.Conventions
 {
     public abstract partial class AuditedTable : IAudit, ITrigger
     {
+        [JsonIgnore]
         public abstract bool TrackDeletions { get; }
         
         [NotMapped]

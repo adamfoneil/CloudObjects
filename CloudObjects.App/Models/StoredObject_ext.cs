@@ -3,12 +3,14 @@ using AO.Models.Interfaces;
 using System;
 using System.Data;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CloudObjects.Models
 {
     public partial class StoredObject : IValidate
     {
+        [JsonIgnore]
         public override bool TrackDeletions => true;
 
         public ValidateResult Validate()
