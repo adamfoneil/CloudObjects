@@ -68,6 +68,8 @@ namespace CloudObjects.App
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CloudObjects API", Version = "v1" });
             });
 
+            // help from https://www.thecodebuzz.com/jwt-authorization-token-swagger-open-api-asp-net-core-3-0/
+
             services
                 .AddAuthentication(options =>
                 {
