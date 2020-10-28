@@ -62,7 +62,7 @@ namespace CloudObjects.App.Controllers
         }
 
         [HttpGet]
-        [Route("/list")]
+        [Route("list")]
         public async Task<IActionResult> List(ListStoredObjects query)
         {
             query.AccountId = _accountId;

@@ -1,6 +1,8 @@
 ﻿using CloudObjects.Client;
+using CloudObjects.Client.Models;
 using CloudObjects.Client.Static;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using Testing.Client.Models;
 using Testing.Client.Static;
 using Testing.Static;
@@ -39,6 +41,37 @@ namespace Testing
                 LastName = "anyone",
                 Address = "343 Whatever St"
             }).Result;
+        }
+
+        [TestMethod]
+        public void ListObjects()
+        {
+            var client = GetClient();
+
+            for (int i = 0; i < 65; i++)
+            {
+                client.SaveAsync($"list/object{i}", new SampleObject()
+                {
+                    FirstName = $"first-name{i}",
+                    LastName = $"last-name{i}"
+                }).Wait();
+            }
+
+            var page1 = client.ListAsync<SampleObject>(new ListObjectsQuery()
+            {
+                NameStartsWith = "list/",
+                Page = 0
+            }).Result;
+
+            Assert.IsTrue(page1.Count() == 50);
+
+            var page2 = client.ListAsync<SampleObject>(new ListObjectsQuery()
+            {
+                NameStartsWith = "list/",
+                Page = 1
+            }).Result;
+
+            Assert.IsTrue(page2.Count() == 15);
         }
     }
 }
