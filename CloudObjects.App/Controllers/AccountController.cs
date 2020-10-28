@@ -1,4 +1,6 @@
 ﻿using CloudObjects.App.Queries;
+using CloudObjects.App.Services;
+using CloudObjects.Client.Models;
 using CloudObjects.Models;
 using Dapper.CX.Classes;
 using Dapper.CX.SqlServer.AspNetCore.Extensions;
@@ -13,8 +15,21 @@ namespace CloudObjects.App.Controllers
     [ApiController]
     public class AccountController : DataController
     {
-        public AccountController(DapperCX<long, SystemUser> data) : base(data)
+        private readonly TokenGenerator _tokenGenerator;
+
+        public AccountController(
+            TokenGenerator tokenGenerator,
+            DapperCX<long, SystemUser> data) : base(data)
         {
+            _tokenGenerator = tokenGenerator;
+        }
+
+        [HttpPost]
+        [Route("api/[controller]/Token")]        
+        public async Task<IActionResult> Token([FromBody] ApiCredentials login)
+        {
+            string token = await _tokenGenerator.GetTokenAsync(login.AccountName, login.AccountKey);
+            return Ok(token);
         }
 
         [HttpPost]

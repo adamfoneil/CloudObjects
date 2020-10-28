@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\CloudObjects.Client\Models\ApiCredentials.cs" Link="Models\ApiCredentials.cs" />
     <Compile Include="..\CloudObjects.Models\Account.cs" Link="Models\Account.cs" />
     <Compile Include="..\CloudObjects.Models\Activity.cs" Link="Models\Activity.cs" />
     <Compile Include="..\CloudObjects.Models\Conventions\AuditedTable.cs" Link="Models\Conventions\AuditedTable.cs" />

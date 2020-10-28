@@ -13,11 +13,13 @@ namespace CloudObjects.App.Services
     public class TokenGenerator
     {
         private readonly string _jwtSecret;
-        private readonly DapperCX<int, SystemUser> _data;
+        private readonly DapperCX<long, SystemUser> _data;
+
+        public const string AccountIdClaim = "AccountId";
 
         public TokenGenerator(
             string jwtSecret,
-            DapperCX<int, SystemUser> data)
+            DapperCX<long, SystemUser> data)
         {
             _jwtSecret = jwtSecret;
             _data = data;
@@ -41,6 +43,7 @@ namespace CloudObjects.App.Services
             var claims = new Claim[]
             {
                 new Claim(ClaimTypes.Name, account.Name),
+                new Claim(AccountIdClaim, account.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
                 new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(365)).ToUnixTimeSeconds().ToString()),
             };

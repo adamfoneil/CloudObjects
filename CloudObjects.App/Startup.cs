@@ -29,14 +29,13 @@ namespace CloudObjects.App
             services.AddControllers();
 
             var connectionString = Configuration.GetConnectionString("Default");
-            
+            var jwtSecret = Configuration["Jwt:Secret"];
 
             services.AddDapperCX(connectionString, (id) => Convert.ToInt64(id));
 
             services.AddMvc();
             services.AddScoped((sp) =>
-            {
-                var jwtSecret = Configuration["Jwt:Secret"];
+            {                
                 var data = sp.GetRequiredService<DapperCX<int, SystemUser>>();
                 return new TokenGenerator(jwtSecret, data);
             });
@@ -49,14 +48,13 @@ namespace CloudObjects.App
             services
                 .AddAuthentication()
                 .AddJwtBearer(options =>
-                {
-                    var secret = Configuration["Jwt:Secret"];
+                {                    
                     options.RequireHttpsMetadata = false;
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters()
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };

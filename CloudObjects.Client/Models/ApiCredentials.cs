@@ -13,6 +13,6 @@
         }
 
         public string AccountName { get; set; }
-        public string AccountKey { get; }
+        public string AccountKey { get; set; }
     }
 }
