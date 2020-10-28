@@ -11,27 +11,32 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace CloudObjects.App.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class ObjectsController : DataController
+    public class ObjectsController : ControllerBase
     {      
         private readonly long _accountId;
 
         public ObjectsController(   
             HttpContext httpContext,
-            DapperCX<long, SystemUser> data) : base(data)
-        {            
+            DapperCX<long, SystemUser> data) 
+        {
+            Data = data;
             _accountId = httpContext.GetClaim(TokenGenerator.AccountIdClaim, (value) => Convert.ToInt64(value));
         }
+
+        public DapperCX<long, SystemUser> Data { get; }
 
         [HttpPost]
         public async Task<IActionResult> Post(StoredObject @object)
         {
             @object.AccountId = _accountId;
+            @object.Length = @object.Json.Length;
             await Data.InsertAsync(@object);
             return Ok(@object);
         }
@@ -40,13 +45,16 @@ namespace CloudObjects.App.Controllers
         public async Task<IActionResult> Put(StoredObject @object)
         {
             @object.AccountId = _accountId;
+            @object.Length = @object.Json.Length;
             await Data.MergeAsync(@object);
             return Ok(@object);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string name)
+        [Route("{name}")]
+        public async Task<IActionResult> Get([FromRoute]string name)
         {
+            name = HttpUtility.UrlDecode(name);
             var result = await Data.GetWhereAsync<StoredObject>(new { accountId = _accountId, name });
             if (result == null) return BadRequest();
             return Ok(result);

@@ -3,6 +3,7 @@ using CloudObjects.Client.Models;
 using CloudObjects.Client.Static;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using System.Text.Json;
 using Testing.Client.Models;
 using Testing.Client.Static;
 using Testing.Static;
@@ -72,6 +73,25 @@ namespace Testing
             }).Result;
 
             Assert.IsTrue(page2.Count() == 15);
+        }
+
+        [TestMethod]
+        public void GetByName()
+        {
+            var client = GetClient();
+
+            var content = new SampleObject()
+            {
+                FirstName = "yessee",
+                LastName = "whoopsie"
+            };
+            var obj = client.SaveAsync("test/hello", content).Result;
+
+            var fetched = client.GetAsync<SampleObject>(obj.Name).Result;
+            Assert.IsTrue(obj.Object.FirstName.Equals(fetched.Object.FirstName));
+            Assert.IsTrue(obj.Object.LastName.Equals(fetched.Object.LastName));
+            Assert.IsTrue(obj.Id == fetched.Id);
+            Assert.IsTrue(obj.Length == JsonSerializer.Serialize(content).Length);
         }
     }
 }
