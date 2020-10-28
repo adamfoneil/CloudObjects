@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace CloudObjects.Client.Interfaces
 {
+    [Headers("Authorization: Bearer")]
     public interface ICloudObjectsAuth
     {
         [Post("/api/Account")]
