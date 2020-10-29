@@ -59,12 +59,23 @@ namespace CloudObjects.App.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("exists/{name}")]
+        public async Task<IActionResult> Exists([FromRoute]string name)
+        {
+            name = HttpUtility.UrlDecode(name);
+            var result = await Data.ExistsWhereAsync<StoredObject>(new { accountId = _accountId, name });
+            return Ok(result);
+        }
+
         [HttpDelete]
+        [Route("{name}")]
         public async Task<IActionResult> Delete(string name)
         {
+            name = HttpUtility.UrlDecode(name);
             var result = await Data.GetWhereAsync<StoredObject>(new { accountId = _accountId, name });
             if (result == null) return BadRequest();
-            await Data.DeleteAsync(result.Id);
+            await Data.DeleteAsync<StoredObject>(result.Id);
             return Ok();
         }
 

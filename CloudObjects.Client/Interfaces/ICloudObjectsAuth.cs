@@ -31,6 +31,9 @@ namespace CloudObjects.Client.Interfaces
         [Get("/api/Objects/{name}")]
         Task<StoredObject> GetAsync(string name);
 
+        [Get("/api/Objects/exists/{name}")]
+        Task<bool> ExistsAsync(string name);
+
         [Delete("/api/Objects/{name}")]
         Task DeleteAsync(string name);
 

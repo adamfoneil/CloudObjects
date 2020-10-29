@@ -108,6 +108,12 @@ namespace CloudObjects.Client
             await _api.DeleteAsync(name);
         }
 
+        public async Task<bool> ExistsAsync(string name)
+        {
+            await LoginAsync();
+            return await _api.ExistsAsync(name);
+        }
+
         public async Task<IEnumerable<CloudObject<T>>> ListAsync<T>(ListObjectsQuery query)
         {
             await LoginAsync();

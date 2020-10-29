@@ -48,6 +48,40 @@ namespace Testing
         }
 
         [TestMethod]
+        public void UpdateObject()
+        {
+            var client = GetClient();
+
+            var obj = client.CreateAsync("object2", new SampleObject()
+            {
+                FirstName = "nobody",
+                LastName = "anyone",
+                Address = "343 Whatever St"
+            }).Result;
+
+            obj.Object.FirstName = "anyone";
+            var result = client.SaveAsync("object2", obj.Object).Result;
+            Assert.IsTrue(result.Object.FirstName.Equals("anyone"));
+        }
+
+        [TestMethod]
+        public void DeleteObject()
+        {
+            var client = GetClient();
+
+            var obj = client.CreateAsync("object3", new SampleObject()
+            {
+                FirstName = "nobody",
+                LastName = "anyone",
+                Address = "343 Whatever St"
+            }).Result;
+
+            client.DeleteAsync("object3").Wait();
+
+            Assert.IsTrue(!client.ExistsAsync("object3").Result);
+        }
+
+        [TestMethod]
         public void ListObjects()
         {
             var client = GetClient();
