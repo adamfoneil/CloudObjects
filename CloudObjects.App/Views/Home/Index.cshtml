@@ -1,4 +1,6 @@
-﻿@{ 
+﻿@model CloudObjects.App.ViewModels.HomeView
+
+@{ 
     ViewBag.Title = "CloudObjects API";
 }
 
@@ -7,14 +9,24 @@
         <h1 class="title">CloudObjects API</h1>
         <h2 class="subtitle">A cloud storage option for runtime objects. Like Azure Table Storage, but simpler.</h2>
         <p>
-            <a href="/swagger">Swagger Doc</a> |
-            <a href="https://github.com/adamfoneil/CloudObjects">GitHub repo</a>
-        </p>
+            <a href="/swagger" class="button mr-3">Swagger Doc</a>
+            <a href="https://github.com/adamfoneil/CloudObjects" class="button">GitHub repo</a>
+        </p>        
     </div>
-
 </section>
 
+@if (Model.IsLocal && !Model.HasValidDb)
+{
+    <div class="is-flex is-align-items-center">
+        <div class="mr-2">Local database is missing: </div>
+        <form method="post" action="/Home/CreateLocalDb">
+            <button class="button is-warning">Create Local Database</button>
+        </form>
+    </div>    
+}
+
 <div class="columns">
+    
     <div class="column">
         <div class="tile">
             
@@ -25,3 +37,9 @@
 
     </div>
 </div>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Database = @Model.DbServerName</p>
+    </div>    
+</footer>

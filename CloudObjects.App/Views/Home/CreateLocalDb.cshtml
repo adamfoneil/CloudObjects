@@ -1,0 +1,24 @@
+﻿@model CloudObjects.App.ViewModels.CreateLocalDbView
+
+@{
+    ViewData["Title"] = "CreateLocalDb";
+}
+
+<section class="hero mb-4">
+    <div class="hero-body">
+        <h1 class="title">Create Local Database</h1>
+    </div>
+    <div>
+        <p><a href="/" class="button">Home</a></p>
+    </div>
+</section>
+
+
+<div class="message @Model.MessageClass">
+    <div class="message-header">
+        @Model.MessageTitle
+    </div>
+    <div class="message-body">
+        @Model.Message
+    </div>
+</div>
