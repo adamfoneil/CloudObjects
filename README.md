@@ -42,6 +42,10 @@ You can clone and build the project of course, but note that I [exclude the data
   }
 }
 ```
+Your solution explorer in Visual Studio should look like this after adding connection.json:
+
+![img](https://adamosoftware.blob.core.windows.net:443/images/cloud-obj-config.png)
+
 When you run the application locally for the first time, you should see this message on the home page that the "local database is missing." Click the button to create the local database and tables.
 
 ![img](https://adamosoftware.blob.core.windows.net:443/images/cloud-obj.png)
