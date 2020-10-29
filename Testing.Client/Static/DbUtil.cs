@@ -38,7 +38,7 @@ namespace Testing.Client.Static
 
                 if (result == null)
                 {
-                    var client = new CloudObjectsClient(HostLocations.Local);
+                    var client = new CloudObjectsAuthClient(HostLocations.Local);
                     result = await client.CreateAccountAsync(testAccount);
                 }
 
