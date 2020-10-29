@@ -27,8 +27,6 @@ namespace CloudObjects.App.Controllers
 
         public IActionResult Index()
         {
-            //var configData = string.Join("\r\n", _config.AsEnumerable().Select(kp => $"key = {kp.Key}, value = {kp.Value.Substring(0, 20)}"));
-
             var model = new HomeView()
             {
                 DbServerName = GetDbServerName(),
