@@ -28,7 +28,7 @@ namespace CloudObjects.App
             services.AddControllers();
 
             // connection string hack because of https://github.com/MicrosoftDocs/azure-docs/issues/65237
-            var connectionString = Configuration["LiveConnection"] ?? Configuration.GetConnectionString("Default");
+            var connectionString = Configuration.TryConnections("LiveConnection", "Default");
             var jwtSecret = Configuration["Jwt:Secret"];
 
             services.AddHttpContextAccessor();
