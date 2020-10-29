@@ -1,12 +1,7 @@
 ﻿using CloudObjects.App.Services;
-using Dapper.CX.Classes;
 using Dapper.CX.SqlServer.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CloudObjects.App.Extensions
 {
@@ -16,7 +11,7 @@ namespace CloudObjects.App.Extensions
         {
             services.AddScoped((sp) =>
             {
-                var data = sp.GetRequiredService<DapperCX<long, SystemUser>>();
+                var data = sp.GetRequiredService<DapperCX<long>>();
                 return new TokenGenerator(jwtSecret, data);
             });
         }

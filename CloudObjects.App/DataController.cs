@@ -10,12 +10,12 @@ namespace CloudObjects.App
 {
     public class DataController : ControllerBase
     {
-        public DataController(DapperCX<long, SystemUser> data)
+        public DataController(DapperCX<long> data)
         {
             Data = data;
         }
 
-        public DapperCX<long, SystemUser> Data { get; }
+        public DapperCX<long> Data { get; }
 
         protected async Task<IActionResult> TryOnVerified(string accountName, string accountKey, Func<long, Task<object>> action)
         {

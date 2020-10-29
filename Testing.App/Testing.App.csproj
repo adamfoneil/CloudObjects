@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper.QX" Version="1.0.18" />
+    <PackageReference Include="Dapper.QX" Version="1.0.19" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.9" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />

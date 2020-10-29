@@ -2,7 +2,6 @@
 using CloudObjects.App.Services;
 using CloudObjects.Client.Models;
 using CloudObjects.Models;
-using Dapper.CX.Classes;
 using Dapper.CX.SqlServer.AspNetCore.Extensions;
 using Dapper.CX.SqlServer.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace CloudObjects.App.Controllers
-{    
+{
     [ApiController]
     public class AccountController : DataController
     {
@@ -19,7 +18,7 @@ namespace CloudObjects.App.Controllers
 
         public AccountController(
             TokenGenerator tokenGenerator,
-            DapperCX<long, SystemUser> data) : base(data)
+            DapperCX<long> data) : base(data)
         {
             _tokenGenerator = tokenGenerator;
         }

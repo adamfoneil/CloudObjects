@@ -12,7 +12,7 @@ namespace CloudObjects.App.Controllers
     [ApiController]
     public class ObjectController : DataController
     {
-        public ObjectController(DapperCX<long, SystemUser> data) : base(data)
+        public ObjectController(DapperCX<long> data) : base(data)
         {
         }
 

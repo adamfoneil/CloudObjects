@@ -24,13 +24,13 @@ namespace CloudObjects.App.Controllers
 
         public ObjectsController(   
             HttpContext httpContext,
-            DapperCX<long, SystemUser> data) 
+            DapperCX<long> data) 
         {
             Data = data;
             _accountId = httpContext.GetClaim(TokenGenerator.AccountIdClaim, (value) => Convert.ToInt64(value));
         }
 
-        public DapperCX<long, SystemUser> Data { get; }
+        public DapperCX<long> Data { get; }
 
         [HttpPost]
         public async Task<IActionResult> Post(StoredObject @object)
