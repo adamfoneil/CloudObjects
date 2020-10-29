@@ -1,4 +1,5 @@
-﻿@model CloudObjects.App.ViewModels.HomeView
+﻿@using CloudObjects.App.Extensions 
+@model CloudObjects.App.ViewModels.HomeView
 
 @{ 
     ViewBag.Title = "CloudObjects API";
@@ -14,6 +15,13 @@
         </p>        
     </div>
 </section>
+
+<ul>
+    @foreach (var kp in Model.ConfigData)
+    {
+        <li>@kp.Key = @kp.Value.MaxLength(20)</li>
+    }
+</ul>
 
 @if (Model.IsLocal && !Model.HasValidDb)
 {

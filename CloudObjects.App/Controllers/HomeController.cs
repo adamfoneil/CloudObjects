@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using ModelSync.Models;
 using SqlServer.LocalDb;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CloudObjects.App.Controllers
@@ -26,11 +27,14 @@ namespace CloudObjects.App.Controllers
 
         public IActionResult Index()
         {
+            //var configData = string.Join("\r\n", _config.AsEnumerable().Select(kp => $"key = {kp.Key}, value = {kp.Value.Substring(0, 20)}"));
+
             var model = new HomeView()
             {
                 DbServerName = GetDbServerName(),
                 IsLocal = Request.IsLocal(),
-                HasValidDb = true
+                HasValidDb = true,
+                ConfigData = _config.AsEnumerable()
             };
 
             if (model.IsLocal) model.HasValidDb = TryConnection();
