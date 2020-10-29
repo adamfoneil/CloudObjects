@@ -13,13 +13,13 @@ namespace CloudObjects.App.Services
     public class TokenGenerator
     {
         private readonly string _jwtSecret;
-        private readonly DapperCX<long, SystemUser> _data;
+        private readonly DapperCX<long> _data;
 
         public const string AccountIdClaim = "AccountId";
 
         public TokenGenerator(
             string jwtSecret,
-            DapperCX<long, SystemUser> data)
+            DapperCX<long> data)
         {
             _jwtSecret = jwtSecret;
             _data = data;

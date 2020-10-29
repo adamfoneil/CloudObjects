@@ -1,11 +1,8 @@
 ﻿using CloudObjects.Client.Interfaces;
 using CloudObjects.Client.Models;
 using CloudObjects.Client.Static;
-using CloudObjects.Interfaces;
 using CloudObjects.Models;
 using Refit;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -38,14 +35,32 @@ namespace CloudObjects.Client
                 AuthorizationHeaderValueGetter = () => Task.FromResult(_token)
             });
         }
+        
+        public ITokenSaver TokenSaver { get; set; }
 
         public async Task LoginAsync()
         {
+            if (TokenSaver != null)
+            {
+                string savedToken = await TokenSaver.GetAsync(_credentials.AccountName);
+                if (!string.IsNullOrEmpty(savedToken)) _token = savedToken;
+            }
+            
             if (IsLoggedIn()) return;
 
             var api = RestService.For<ICloudObjectsToken>(Host.Urls[_location]);
-            _token = await api.GetTokenAsync(_credentials);
-            //if (string.IsNullOrEmpty(_token)) throw new Exception("Invalid ")
+            _token = await api.GetTokenAsync(_credentials);            
+
+            if (TokenSaver != null)
+            {
+                await TokenSaver?.SaveAsync(_credentials.AccountName, _token);
+            }
+        }
+
+        public async Task LogoutAsync()
+        {
+            _token = null;
+            await TokenSaver?.DeleteAsync(_credentials.AccountName);
         }
 
         private bool IsLoggedIn() => !string.IsNullOrEmpty(_token);

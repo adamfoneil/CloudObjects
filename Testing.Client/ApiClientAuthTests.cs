@@ -2,8 +2,10 @@
 using CloudObjects.Client.Models;
 using CloudObjects.Client.Static;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SqlServer.LocalDb;
 using System.Linq;
 using System.Text.Json;
+using Testing.Client;
 using Testing.Client.Models;
 using Testing.Client.Static;
 using Testing.Static;
@@ -28,6 +30,7 @@ namespace Testing
         {
             var account = DbUtil.GetTestAccountAsync(testAccount, ConfigHelper.GetConnection).Result;
             var client = new CloudObjectsAuthClient(HostLocations.Local, account.Name, account.Key);
+            //client.TokenSaver = new DbTokenSaver(() => LocalDb.GetConnection("CloudObjectsLocal"));
             return client;
         }
 
