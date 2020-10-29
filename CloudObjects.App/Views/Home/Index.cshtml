@@ -16,13 +16,6 @@
     </div>
 </section>
 
-<ul>
-    @foreach (var kp in Model.ConfigData)
-    {
-        <li>@kp.Key = @kp.Value.MaxLength(20)</li>
-    }
-</ul>
-
 @if (Model.IsLocal && !Model.HasValidDb)
 {
     <div class="is-flex is-align-items-center">

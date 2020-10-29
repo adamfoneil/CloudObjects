@@ -31,8 +31,7 @@ namespace CloudObjects.App.Controllers
             {
                 DbServerName = GetDbServerName(),
                 IsLocal = Request.IsLocal(),
-                HasValidDb = true,
-                ConfigData = _config.AsEnumerable()
+                HasValidDb = true
             };
 
             if (model.IsLocal) model.HasValidDb = TryConnection();
