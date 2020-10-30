@@ -15,8 +15,10 @@ namespace CloudObjects.App
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration(configure =>
                 {
-                    configure.AddJsonFile("Config/appsettings.json");
-                    configure.AddJsonFile("Config/connection.json");
+                    configure
+                        .AddJsonFile("Config/appsettings.json")
+                        .AddJsonFile("Config/connection.json")
+                        .AddEnvironmentVariables();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

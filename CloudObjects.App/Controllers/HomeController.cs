@@ -56,7 +56,7 @@ namespace CloudObjects.App.Controllers
 
             string GetDbServerName()
             {
-                string connectionString = _config.TryConnections("LiveConnection", "Default");
+                string connectionString = _config.GetConnectionString("Default");
                 return ConnectionString.Token(connectionString, new string[] { "Server", "Data Source" });
             }
         }
