@@ -1,6 +1,5 @@
 using CloudObjects.App.Extensions;
 using Dapper.CX.SqlServer.AspNetCore;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,10 +11,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CloudObjects.App
@@ -127,6 +124,9 @@ namespace CloudObjects.App
             });
         }        
 
+        /// <summary>
+        /// this was for some Azure troubleshooting. Not needed now, but left in for study
+        /// </summary>
         private async Task OutputConfigAsync(HttpContext context, Dictionary<Func<KeyValuePair<string, string>, bool> , Func<string, string>> redactions = null)
         {                        
             await context.Response.WriteAsync(
