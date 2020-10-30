@@ -19,7 +19,7 @@ namespace CloudObjects.Client.Interfaces
         [Post("/api/Account")]
         Task<Account> CreateAccountAsync(string name);
 
-        [Put("/api/Account")]
+        [Put("/api/Account?newName={newName}")]
         Task<Account> RenameAccountAsync(string newName);
 
         [Post("/api/Objects/")]
@@ -39,5 +39,8 @@ namespace CloudObjects.Client.Interfaces
 
         [Get("/api/Objects/List")]
         Task<IEnumerable<StoredObject>> ListAsync([Body] IListObjectsQuery query);
+
+        [Put("/api/Objects/Rename?oldName={oldName}&newName={newName}")]
+        Task RenameAsync(string oldName, string newName);
     }
 }

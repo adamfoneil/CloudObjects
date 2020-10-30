@@ -120,5 +120,17 @@ namespace CloudObjects.Client
             var results = await _api.ListAsync(query);
             return results.Select(storedObj => CloudObject<T>.FromStoredObject(storedObj));
         }
+
+        public async Task RenameAccountAsync(string newName)
+        {
+            await LoginAsync();
+            await _api.RenameAccountAsync(newName);
+        }
+
+        public async Task RenameAsync(string oldName, string newName)
+        {
+            await LoginAsync();
+            await _api.RenameAsync(oldName, newName);
+        }
     }
 }

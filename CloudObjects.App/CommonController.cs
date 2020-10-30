@@ -1,6 +1,8 @@
 ﻿using CloudObjects.App.Extensions;
 using CloudObjects.App.Services;
 using Dapper.CX.SqlServer.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -8,13 +10,14 @@ using System.Linq;
 
 namespace CloudObjects.App
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CommonController : ControllerBase
     {
         public CommonController(
             HttpContext httpContext,
             DapperCX<long> data)
-        {
-            if (User?.Claims.Any() ?? false)
+        {            
+            if (httpContext?.User.Claims.Any() ?? false)
             {
                 AccountId = httpContext.GetClaim(TokenGenerator.AccountIdClaim, (value) => Convert.ToInt64(value));
             }

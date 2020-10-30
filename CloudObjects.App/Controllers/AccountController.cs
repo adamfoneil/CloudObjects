@@ -14,8 +14,7 @@ using System.Threading.Tasks;
 
 namespace CloudObjects.App.Controllers
 {
-    [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [ApiController]    
     [Route("api/[controller]")]
     public class AccountController : CommonController
     {
@@ -53,11 +52,15 @@ namespace CloudObjects.App.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(Account account)
+        public async Task<IActionResult> Put([FromQuery]string newName)
         {
-            if (account.Id == 0) account.Id = AccountId;
-            await Data.UpdateAsync(account);
-            return Ok(account);
+            var acct = new Account()
+            {
+                Name = newName,
+                Id = AccountId
+            };            
+            await Data.UpdateAsync(acct);
+            return Ok(acct);
         }
 
         [HttpDelete]        

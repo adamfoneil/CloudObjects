@@ -2,10 +2,8 @@
 using CloudObjects.Client.Models;
 using CloudObjects.Client.Static;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SqlServer.LocalDb;
 using System.Linq;
 using System.Text.Json;
-using Testing.Client;
 using Testing.Client.Models;
 using Testing.Client.Static;
 using Testing.Static;
@@ -129,6 +127,31 @@ namespace Testing
             Assert.IsTrue(obj.Object.LastName.Equals(fetched.Object.LastName));
             Assert.IsTrue(obj.Id == fetched.Id);
             Assert.IsTrue(obj.Length == JsonSerializer.Serialize(content).Length);
+        }
+
+        [TestMethod]
+        public void RenameAccount()
+        {
+            var client = GetClient();
+
+            client.RenameAccountAsync("the-new-name").Wait();
+            client.RenameAccountAsync(testAccount).Wait();
+        }
+
+        [TestMethod]
+        public void RenameObject()
+        {
+            var client = GetClient();
+            var obj = client.SaveAsync("test/whatever", new SampleObject()
+            {
+                FirstName = "Oingo",
+                LastName = "Boingo"
+            });
+
+            client.RenameAsync("test/whatever", "test/very-whatever").Wait();
+
+            Assert.IsTrue(client.ExistsAsync("test/very-whatever").Result);
+            Assert.IsTrue(!client.ExistsAsync("test/whatever").Result);
         }
     }
 }

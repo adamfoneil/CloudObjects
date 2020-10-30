@@ -2,6 +2,7 @@
 using CloudObjects.App.Queries;
 using CloudObjects.App.Services;
 using CloudObjects.Models;
+using Dapper.CX.Classes;
 using Dapper.CX.SqlServer.AspNetCore.Extensions;
 using Dapper.CX.SqlServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,8 +16,7 @@ using System.Web;
 namespace CloudObjects.App.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [ApiController]    
     public class ObjectsController : CommonController
     {      
         public ObjectsController(   
@@ -41,6 +41,22 @@ namespace CloudObjects.App.Controllers
             @object.Length = @object.Json.Length;
             await Data.MergeAsync(@object);
             return Ok(@object);
+        }
+
+        [HttpPut]
+        [Route("rename")]
+        public async Task<IActionResult> Put([FromQuery]string oldName, [FromQuery]string newName)
+        {
+            oldName = HttpUtility.UrlDecode(oldName);
+            newName = HttpUtility.UrlDecode(newName);
+
+            var obj = await Data.GetWhereAsync<StoredObject>(new { AccountId, Name = oldName });
+            if (obj == null) return BadRequest($"Object named {oldName} not found.");
+
+            var ct = new ChangeTracker<StoredObject>(obj);            
+            obj.Name = newName;
+            await Data.UpdateAsync(obj, ct);                            
+            return Ok();
         }
 
         [HttpGet]
