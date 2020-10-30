@@ -12,7 +12,7 @@ namespace CloudObjects.Models
 
         public ValidateResult Validate()
         {
-            const string allowedChars = "abcdefghijklmnopqrstuvwxyz1234567890.-";
+            const string allowedChars = "ABCDEFGHIJKLMNOPQURSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890.-";
 
             if (Name.Length < 5) return new ValidateResult("Account name must be least 5 characters long.");
 
