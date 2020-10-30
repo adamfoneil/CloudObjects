@@ -1,15 +1,21 @@
 using CloudObjects.App.Extensions;
 using Dapper.CX.SqlServer.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace CloudObjects.App
 {
@@ -105,13 +111,38 @@ namespace CloudObjects.App
             {
                 endpoints.MapControllers();
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapGet("/configdump", async (context) => await OutputConfigAsync(context, new Dictionary<Func<string, bool>, Func<string, string>>
+                {
+                    [(value) => ConnectionString.IsSensitive(value, out _)] = (value) => ConnectionString.Redact(value)
+                }));
             });
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");                
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+        }        
+
+        private async Task OutputConfigAsync(HttpContext context, Dictionary<Func<string, bool> , Func<string, string>> redactions = null)
+        {            
+            await context.Response.WriteAsync(
+                @"<html><head>
+                    <link rel=""stylesheet"" href=""https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css""/>
+                </head><body class=""container"">");
+
+            await context.Response.WriteAsync("<ul>");
+            foreach (var item in Configuration.AsEnumerable().OrderBy(item => item.Key))
+            {
+                foreach (var rule in redactions)
+                {
+                    var output = (rule.Key.Invoke(item.Value)) ?
+                        rule.Value.Invoke(item.Value) :
+                        item.Value;
+                    await context.Response.WriteAsync($"<li>{item.Key} = {output}</li>\r\n");
+                }                               
+            }
+            await context.Response.WriteAsync("</ul></body></html>");            
         }
-    }
+    }    
 }
