@@ -33,8 +33,15 @@ namespace CloudObjects.App.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Token([FromBody] ApiCredentials login)
         {
-            string token = await _tokenGenerator.GetTokenAsync(login.AccountName, login.AccountKey);
-            return Ok(token);
+            try
+            {
+                string token = await _tokenGenerator.GetTokenAsync(login.AccountName, login.AccountKey);
+                return Ok(token);
+            }
+            catch (Exception exc)
+            {
+                return BadRequest(exc.Message);
+            }
         }
 
         [HttpPost]        

@@ -84,7 +84,7 @@ namespace CloudObjects.App.Controllers
         {
             name = HttpUtility.UrlDecode(name);
             var result = await Data.GetWhereAsync<StoredObject>(new { accountId = AccountId, name });
-            if (result == null) return BadRequest();
+            if (result == null) return Ok();
             await Data.DeleteAsync<StoredObject>(result.Id);
             return Ok();
         }
