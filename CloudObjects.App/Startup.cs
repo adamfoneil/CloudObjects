@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -110,10 +111,13 @@ namespace CloudObjects.App
             {
                 endpoints.MapControllers();
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapGet("/configdump", async (context) => await OutputConfigAsync(context, new Dictionary<Func<string, bool>, Func<string, string>>
+                /*
+                endpoints.MapGet("/config", async (context) => await OutputConfigAsync(context, new Dictionary<Func<KeyValuePair<string, string>, bool>, Func<string, string>>
                 {
-                    [(value) => ConnectionString.IsSensitive(value, out _)] = (value) => ConnectionString.Redact(value)
+                    [(kp) => ConnectionString.IsSensitive(kp.Value, out _)] = (value) => ConnectionString.Redact(value),
+                    [(kp) => kp.Key.Contains("Secret")] = (value) => "&lt;redacted&gt;"
                 }));
+                */
             });
 
             app.UseSwagger();
@@ -123,25 +127,40 @@ namespace CloudObjects.App
             });
         }        
 
-        private async Task OutputConfigAsync(HttpContext context, Dictionary<Func<string, bool> , Func<string, string>> redactions = null)
-        {            
+        private async Task OutputConfigAsync(HttpContext context, Dictionary<Func<KeyValuePair<string, string>, bool> , Func<string, string>> redactions = null)
+        {                        
             await context.Response.WriteAsync(
                 @"<html><head>
                     <link rel=""stylesheet"" href=""https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css""/>
                 </head><body class=""container"">");
 
             await context.Response.WriteAsync("<ul>");
+
             foreach (var item in Configuration.AsEnumerable().OrderBy(item => item.Key))
+            {
+                var output = (IsRedacted(item, out Func<string, string> transform)) ?
+                    transform.Invoke(item.Value) :
+                    item.Value;
+
+                await context.Response.WriteAsync($"<li>{item.Key} = {output}</li>\r\n");
+            }
+
+            await context.Response.WriteAsync("</ul></body></html>");            
+
+            bool IsRedacted(KeyValuePair<string, string> setting, out Func<string, string> transform)
             {
                 foreach (var rule in redactions)
                 {
-                    var output = (rule.Key.Invoke(item.Value)) ?
-                        rule.Value.Invoke(item.Value) :
-                        item.Value;
-                    await context.Response.WriteAsync($"<li>{item.Key} = {output}</li>\r\n");
-                }                               
+                    if (rule.Key.Invoke(setting))
+                    {
+                        transform = redactions[rule.Key];
+                        return true;
+                    }    
+                }
+
+                transform = null;
+                return false;
             }
-            await context.Response.WriteAsync("</ul></body></html>");            
         }
     }    
 }
