@@ -17,6 +17,10 @@ namespace CloudObjects.Models
         [SaveAction(SaveAction.Insert)]
         public string Key { get; set; }
 
+        /// <summary>
+        /// if we were going to make a monetized service, then I figured we would want 
+        /// to track some kind of renewal date, but this is not enforced at all currently
+        /// </summary>
         [SaveAction(SaveAction.Insert)]
         public DateTime InvoiceDate { get; set; } = DateTime.UtcNow.AddDays(30);
 
