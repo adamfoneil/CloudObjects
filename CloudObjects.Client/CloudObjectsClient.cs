@@ -127,10 +127,10 @@ namespace CloudObjects.Client
             await _api.RenameAccountAsync(newName);
         }
 
-        public async Task RenameAsync(string oldName, string newName)
+        public async Task RenameObjectAsync(string oldName, string newName)
         {
             await LoginAsync();
-            await _api.RenameAsync(oldName, newName);
+            await _api.RenameObjectAsync(oldName, newName);
         }
     }
 }

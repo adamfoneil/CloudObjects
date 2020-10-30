@@ -28,7 +28,10 @@ namespace Testing
         {
             var account = DbUtil.GetTestAccountAsync(testAccount, ConfigHelper.GetConnection).Result;
             var client = new CloudObjectsClient(HostLocations.Local, account.Name, account.Key);
-            //client.TokenSaver = new DbTokenSaver(() => LocalDb.GetConnection("CloudObjectsLocal"));
+
+            // token saver doesn't work in these tests because we keep re-building the test account with a new Id, which breaks any saved token
+            //client.TokenSaver = new DbTokenSaver(() => LocalDb.GetConnection("CloudObjects"));
+
             return client;
         }
 
@@ -141,17 +144,20 @@ namespace Testing
         [TestMethod]
         public void RenameObject()
         {
+            const string oldName = "test/whatever";
+            const string newName = "test/very-whatever";
+
             var client = GetClient();
-            var obj = client.SaveAsync("test/whatever", new SampleObject()
+            var obj = client.SaveAsync(oldName, new SampleObject()
             {
                 FirstName = "Oingo",
                 LastName = "Boingo"
-            });
+            }).Result;
 
-            client.RenameAsync("test/whatever", "test/very-whatever").Wait();
+            client.RenameObjectAsync(oldName, newName).Wait();
 
-            Assert.IsTrue(client.ExistsAsync("test/very-whatever").Result);
-            Assert.IsTrue(!client.ExistsAsync("test/whatever").Result);
+            Assert.IsTrue(client.ExistsAsync(newName).Result);
+            Assert.IsTrue(!client.ExistsAsync(oldName).Result);
         }
     }
 }

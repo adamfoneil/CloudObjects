@@ -51,7 +51,7 @@ namespace CloudObjects.App.Controllers
             newName = HttpUtility.UrlDecode(newName);
 
             var obj = await Data.GetWhereAsync<StoredObject>(new { AccountId, Name = oldName });
-            if (obj == null) return BadRequest($"Object named {oldName} not found.");
+            if (obj == null) return BadRequest($"Object named {oldName} in account Id {AccountId} not found.");
 
             var ct = new ChangeTracker<StoredObject>(obj);            
             obj.Name = newName;

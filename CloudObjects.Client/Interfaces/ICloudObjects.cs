@@ -10,9 +10,6 @@ namespace CloudObjects.Client.Interfaces
     [Headers("Authorization: Bearer")]
     internal interface ICloudObjects
     {
-        /// <summary>
-        /// needs to be a separate interface because we can't require a token before we have a token!
-        /// </summary>
         [Post("/api/Account/Token")]
         Task<string> GetTokenAsync([Body] ApiCredentials login);
 
@@ -41,6 +38,6 @@ namespace CloudObjects.Client.Interfaces
         Task<IEnumerable<StoredObject>> ListAsync([Body] IListObjectsQuery query);
 
         [Put("/api/Objects/Rename?oldName={oldName}&newName={newName}")]
-        Task RenameAsync(string oldName, string newName);
+        Task RenameObjectAsync(string oldName, string newName);
     }
 }
