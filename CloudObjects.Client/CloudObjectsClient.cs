@@ -10,27 +10,27 @@ using System.Threading.Tasks;
 
 namespace CloudObjects.Client
 {
-    public class CloudObjectsAuthClient
+    public class CloudObjectsClient
     {
         private readonly ApiCredentials _credentials;
-        private readonly ICloudObjectsAuth _api = null;
+        private readonly ICloudObjects _api = null;
         private readonly HostLocations _location;
 
         private string _token = null;
 
-        public CloudObjectsAuthClient(string accountName, string accountKey) : this(HostLocations.Online, new ApiCredentials(accountName, accountKey))
+        public CloudObjectsClient(string accountName, string accountKey) : this(HostLocations.Online, new ApiCredentials(accountName, accountKey))
         {
         }
 
-        public CloudObjectsAuthClient(HostLocations location, string accountName, string accountKey) : this(location, new ApiCredentials(accountName, accountKey))
+        public CloudObjectsClient(HostLocations location, string accountName, string accountKey) : this(location, new ApiCredentials(accountName, accountKey))
         {
         }
 
-        public CloudObjectsAuthClient(HostLocations location, ApiCredentials credentials = null)
+        public CloudObjectsClient(HostLocations location, ApiCredentials credentials = null)
         {
             _credentials = credentials;
             _location = location;
-            _api = RestService.For<ICloudObjectsAuth>(Host.Urls[location], new RefitSettings()
+            _api = RestService.For<ICloudObjects>(Host.Urls[location], new RefitSettings()
             {
                 AuthorizationHeaderValueGetter = () => Task.FromResult(_token)
             });
@@ -48,7 +48,7 @@ namespace CloudObjects.Client
             
             if (IsLoggedIn()) return;
 
-            var api = RestService.For<ICloudObjectsToken>(Host.Urls[_location]);
+            var api = RestService.For<ICloudObjects>(Host.Urls[_location]);
             _token = await api.GetTokenAsync(_credentials);            
 
             if (TokenSaver != null)

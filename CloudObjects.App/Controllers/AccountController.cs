@@ -4,6 +4,9 @@ using CloudObjects.Client.Models;
 using CloudObjects.Models;
 using Dapper.CX.SqlServer.AspNetCore.Extensions;
 using Dapper.CX.SqlServer.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StringIdLibrary;
 using System;
@@ -12,27 +15,31 @@ using System.Threading.Tasks;
 namespace CloudObjects.App.Controllers
 {
     [ApiController]
-    public class AccountController : DataController
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/[controller]")]
+    public class AccountController : CommonController
     {
-        private readonly TokenGenerator _tokenGenerator;
+        private readonly TokenGenerator _tokenGenerator;        
 
         public AccountController(
+            HttpContext httpContext,
             TokenGenerator tokenGenerator,
-            DapperCX<long> data) : base(data)
+            DapperCX<long> data) : base(httpContext, data)
         {
-            _tokenGenerator = tokenGenerator;
+            _tokenGenerator = tokenGenerator;            
         }
 
         [HttpPost]
-        [Route("api/[controller]/Token")]        
+        [Route("Token")]        
+        [AllowAnonymous]
         public async Task<IActionResult> Token([FromBody] ApiCredentials login)
         {
             string token = await _tokenGenerator.GetTokenAsync(login.AccountName, login.AccountKey);
             return Ok(token);
         }
 
-        [HttpPost]
-        [Route("api/[controller]")]
+        [HttpPost]        
+        [AllowAnonymous]
         public async Task<IActionResult> Post(string name)
         {
             var account = new Account()
@@ -46,24 +53,21 @@ namespace CloudObjects.App.Controllers
         }
 
         [HttpPut]
-        [Route("api/[controller]/{accountName}")]
-        public async Task<IActionResult> Put([FromRoute]string accountName, [FromQuery(Name = "key")]string accountKey, Account account) => 
-            await TryOnVerified(accountName, accountKey, async (acctId) =>
-            {            
-                if (account.Id == 0) account.Id = acctId;
-                await Data.UpdateAsync(account);
-                return account;
-            });
+        public async Task<IActionResult> Put(Account account)
+        {
+            if (account.Id == 0) account.Id = AccountId;
+            await Data.UpdateAsync(account);
+            return Ok(account);
+        }
 
-        [HttpDelete]
-        [Route("api/[controller]/{accountName}")]
-        public async Task<IActionResult> Delete([FromRoute] string accountName, [FromQuery(Name = "key")] string accountKey) =>
-            await TryOnVerified(accountName, accountKey, async (acctId) =>
-            {
-                await Data.QueryAsync(new DeleteAccountActivity() { AccountId = acctId });
-                await Data.DeleteAsync<Account>(acctId);
-                return true;
-            });
+        [HttpDelete]        
+        public async Task<IActionResult> Delete()
+        {
+            // note this works only if you don't have any objects in your account; delete does not cascade
+            await Data.QueryAsync(new DeleteAccountActivity() { AccountId = AccountId });
+            await Data.DeleteAsync<Account>(AccountId);
+            return Ok();
+        }
 
         private static string GetKey()
         {

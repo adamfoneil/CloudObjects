@@ -6,7 +6,7 @@
 }
 
 <section class="hero">
-    <div class="hero-body">
+    <div class="hero-body has-text-centered">
         <h1 class="title">CloudObjects API</h1>
         <h2 class="subtitle">A cloud storage option for runtime objects. Like Azure Table Storage, but simpler.</h2>
         <p>
@@ -18,7 +18,7 @@
 
 @if (Model.IsLocal && !Model.HasValidDb)
 {
-    <div class="is-flex is-align-items-center">
+    <div class="is-flex is-align-items-center has-text-centered">
         <div class="mr-2">Local database is missing: </div>
         <form method="post" action="/Home/CreateLocalDb">
             <button class="button is-warning">Create Local Database</button>
@@ -38,9 +38,3 @@
 
     </div>
 </div>
-
-<footer class="footer">
-    <div class="content has-text-centered">
-        <p>Database = @Model.DbServerName</p>
-    </div>    
-</footer>

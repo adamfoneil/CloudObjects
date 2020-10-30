@@ -26,10 +26,10 @@ namespace Testing
             DbUtil.DeleteAccount(testAccount, ConfigHelper.GetConnection);
         }
 
-        private CloudObjectsAuthClient GetClient()
+        private CloudObjectsClient GetClient()
         {
             var account = DbUtil.GetTestAccountAsync(testAccount, ConfigHelper.GetConnection).Result;
-            var client = new CloudObjectsAuthClient(HostLocations.Local, account.Name, account.Key);
+            var client = new CloudObjectsClient(HostLocations.Local, account.Name, account.Key);
             //client.TokenSaver = new DbTokenSaver(() => LocalDb.GetConnection("CloudObjectsLocal"));
             return client;
         }
