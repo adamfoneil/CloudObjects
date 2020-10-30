@@ -33,13 +33,21 @@ I do some seemingly oddball things with the Model project dependency. Instead of
 There are two test projects [Testing.App](https://github.com/adamfoneil/CloudObjects/tree/master/Testing.App) and [Testing.Client](https://github.com/adamfoneil/CloudObjects/tree/master/Testing.Client). I had to separate them because of how the Model classes are linked in both the App and Client projects. If I had a single test project, then the Model classes would be linked twice, which would offend the C# compiler. Having separate test projects fixes that.
 
 ### Cloning and running the project
-You can clone and build the project of course, but note that I [exclude the database connection info](https://github.com/adamfoneil/CloudObjects/blob/master/.gitignore#L341) from source control because I use credentials that I need to keep private. To run the project, you'd need to create a local database instance as well as create a json file like this:
+You can clone and build the project of course, but note that I [exclude the database connection info](https://github.com/adamfoneil/CloudObjects/blob/master/.gitignore#L341) from source control because I use credentials that I need to keep private. To run the project, create a json file within the CloudObjects.App project folder called **Config/connection.json** and give it a SQL Server localdb connection string like this. You must use the database name **CloudObjects**.
 
 ```json
 {
   "ConnectionStrings": {
-    "Default": "your connection string"
+    "Default": "Server=(localdb)\\mssqllocaldb;Database=CloudObjects;Integrated Security=true"
   }
 }
 ```
-You can create the local database using my [Model Sync](http://www.aosoftware.net/modelSync.html) app, but I would probably need to do a walkthrough on that to make that easy for you.
+Your solution explorer in Visual Studio should look like this after adding connection.json:
+
+![img](https://adamosoftware.blob.core.windows.net:443/images/cloud-obj-config.png)
+
+When you run the application locally for the first time, you should see this message on the home page that the "local database is missing." Click the button to create the local database and tables.
+
+![img](https://adamosoftware.blob.core.windows.net:443/images/cloud-obj.png)
+
+The code that creates the tables is [here](https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.App/Controllers/HomeController.cs#L64). It uses my [ModelSync](https://github.com/adamfoneil/ModelSync) project.
