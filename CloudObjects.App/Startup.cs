@@ -28,65 +28,21 @@ namespace CloudObjects.App
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {            
+            // built-in services
             services.AddControllers();
+            services.AddMvc();
+            services.AddHttpContextAccessor();
+            services.AddHttpContext();
 
+            // app-specific
             var connectionString = Configuration.GetConnectionString("Default");
             var jwtSecret = Configuration["Jwt:Secret"];
 
-            services.AddHttpContextAccessor();
             services.AddDapperCX(connectionString, (id) => Convert.ToInt64(id));
-
-            services.AddMvc();
             services.AddTokenGenerator(jwtSecret);
-            services.AddHttpContext();
-            
-            services.AddSwaggerGen(c =>
-            {
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-                {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header
-                });
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                {
-                    [new OpenApiSecurityScheme()
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    }] = new string[] { }
-                });
-
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CloudObjects API", Version = "v1" });
-            });
-
-            // help from https://www.thecodebuzz.com/jwt-authorization-token-swagger-open-api-asp-net-core-3-0/
-
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(options =>
-                {                    
-                    options.RequireHttpsMetadata = false;
-                    options.SaveToken = true;
-                    options.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
+            services.AddCloudObjectsAuthentication(jwtSecret);
+            services.AddSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
