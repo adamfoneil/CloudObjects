@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudObjects.Client", "Clou
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing.Client", "Testing.Client\Testing.Client.csproj", "{F93CDA80-9D3E-4067-B72A-9BA185479AC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.App", "Testing.App\Testing.App.csproj", "{BDF6C0EA-EFB2-4B69-B24A-B7D5198337A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing.App", "Testing.App\Testing.App.csproj", "{BDF6C0EA-EFB2-4B69-B24A-B7D5198337A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
