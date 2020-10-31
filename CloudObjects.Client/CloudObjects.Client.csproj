@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Classes\" />
     <Folder Include="Models\Server\Conventions\" />
     <Folder Include="Enums\" />
   </ItemGroup>

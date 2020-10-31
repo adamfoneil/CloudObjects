@@ -89,7 +89,7 @@ namespace CloudObjects.App.Controllers
             return Ok();
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("list")]
         public async Task<IActionResult> List(ListStoredObjects query)
         {

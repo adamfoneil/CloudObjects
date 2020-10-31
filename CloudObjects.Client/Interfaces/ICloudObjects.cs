@@ -34,7 +34,7 @@ namespace CloudObjects.Client.Interfaces
         [Delete("/api/Objects/{name}")]
         Task DeleteAsync(string name);
 
-        [Get("/api/Objects/List")]
+        [Post("/api/Objects/List")]
         Task<IEnumerable<StoredObject>> ListAsync([Body] IListObjectsQuery query);
 
         [Put("/api/Objects/Rename?oldName={oldName}&newName={newName}")]
