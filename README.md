@@ -1,3 +1,5 @@
+[![Nuget](https://img.shields.io/nuget/v/AO.CloudObjects.Client)](https://www.nuget.org/packages/AO.CloudObjects.Client/)
+
 I started this because I got fed up with Azure Table Storage. It feels too complicated to me, and I thought it would be a good exercise to see if I could implement the experience I was looking for. This is a good way to see if the complexity is justified and to get a deeper understanding of the issues in play. Here's the kind of code I'm wanting to write:
 
 ```csharp
