@@ -34,13 +34,15 @@ Console.WriteLine($"key = {account.Key}");
 
 <section class="section">
     <h1 class="title is-size-4 has-text-centered">Typical Use</h1>
-<p class="my-3">After you have a key, you can start storing and retrieving objects. Here's an example of storing an object as 
-    <code>object1</code> of type <code>MyObjectType</code>.
-    You can use any type that can serialize to json.</p>
+    <p class="my-3">After you have a key, you can start storing and retrieving objects. Here's an example of storing an object as 
+        <code>object1</code> of type <code>MyObjectType</code>. You can use any type that can serialize to json.
+        The repo wiki has complete info on the <a href="https://github.com/adamfoneil/CloudObjects/wiki/Client-Reference">Client</a> and 
+        <a href="https://github.com/adamfoneil/CloudObjects/wiki/Models-Reference">Model</a> classes.
+    </p>
 
-<p class="my-3">When you use the <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/CloudObjectsClient.cs#L83">SaveAsync</a> 
-    or <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/CloudObjectsClient.cs#L70">CreateAsync</a> methods, 
-    you get back a <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/Models/CloudObject.cs">CloudObject&lt;T&gt;</a></p>
+    <p class="my-3">When you use the <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/CloudObjectsClient.cs#L83">SaveAsync</a> 
+        or <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/CloudObjectsClient.cs#L70">CreateAsync</a> methods, 
+        you get back a <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/Models/CloudObject.cs">CloudObject&lt;T&gt;</a>.</p>
 
 <pre class="my-3">
 class Program
