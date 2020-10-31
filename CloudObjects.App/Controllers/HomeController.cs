@@ -61,6 +61,11 @@ namespace CloudObjects.App.Controllers
             }
         }
 
+        public IActionResult About()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> CreateLocalDb()
         {
             var result = new CreateLocalDbView();

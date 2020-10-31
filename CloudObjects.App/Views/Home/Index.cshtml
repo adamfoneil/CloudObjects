@@ -5,20 +5,6 @@
     ViewBag.Title = "CloudObjects API";
 }
 
-<section class="hero">
-    <div class="hero-body has-text-centered">
-        <h1 class="title">CloudObjects API</h1>
-        <h2 class="is-size-5 mb-3">A REST API storage solution for runtime objects with a C# client. Like Azure Table Storage, but simpler.</h2>
-        <p>
-            <a href="/swagger" class="button mr-3">Swagger Doc</a>
-            <a href="https://github.com/adamfoneil/CloudObjects" class="button mr-3">GitHub repo</a>
-            <a href="https://www.nuget.org/packages/AO.CloudObjects.Client" class="button">NuGet Package</a>
-        </p> 
-        <p class="is-size-6 mt-3">This is for fun and tutorial purposes. Probably not a real service.</p>
-        <p class="is-size-6">Made with: <a href="https://dotnet.microsoft.com/apps/aspnet/web-apps">.NET Core 3.1</a> on the backend and powered by <a href="https://github.com/reactiveui/refit">Refit</a> in the client.</p>
-    </div>
-</section>
-
 @if (Model.IsLocal && !Model.HasValidDb)
 {
     <div class="is-flex is-align-items-center has-text-centered">
@@ -32,7 +18,7 @@
 <section class="section">
     <h1 class="title is-size-4 has-text-centered">Getting Started</h1>
     <p class="my-3">First, install the <a href="https://www.nuget.org/packages/AO.CloudObjects.Client">NuGet package</a> in your poject.</p>
-    <p class="my-3">Then, if you have done so already, create an account and get a key. You can do this programmatically as shown below.</p>
+    <p class="my-3">Then, if you haven't done so already, create an account and get a key. You can do this programmatically as shown below.</p>
 
 <pre class="my-3">
 var client = new CloudObjectsClient(HostLocations.Online);
