@@ -54,7 +54,6 @@ namespace CloudObjects.App
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
@@ -64,13 +63,6 @@ namespace CloudObjects.App
             {
                 endpoints.MapControllers();
                 endpoints.MapDefaultControllerRoute();
-                /*
-                endpoints.MapGet("/config", async (context) => await OutputConfigAsync(context, new Dictionary<Func<KeyValuePair<string, string>, bool>, Func<string, string>>
-                {
-                    [(kp) => ConnectionString.IsSensitive(kp.Value, out _)] = (value) => ConnectionString.Redact(value),
-                    [(kp) => kp.Key.Contains("Secret")] = (value) => "&lt;redacted&gt;"
-                }));
-                */
             });
 
             app.UseSwagger();
@@ -79,6 +71,15 @@ namespace CloudObjects.App
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
         }        
+
+        /*
+        removed from app.UseEndpoints
+        endpoints.MapGet("/config", async (context) => await OutputConfigAsync(context, new Dictionary<Func<KeyValuePair<string, string>, bool>, Func<string, string>>
+        {
+            [(kp) => ConnectionString.IsSensitive(kp.Value, out _)] = (value) => ConnectionString.Redact(value),
+            [(kp) => kp.Key.Contains("Secret")] = (value) => "&lt;redacted&gt;"
+        }));
+        */
 
         /// <summary>
         /// this was for some Azure troubleshooting. Not needed now, but left in for study
