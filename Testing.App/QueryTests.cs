@@ -3,7 +3,7 @@ using Dapper.QX;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Testing.Static;
 
-namespace Testing
+namespace Testing.App
 {
     [TestClass]
     public class QueryTests
