@@ -28,6 +28,11 @@
   <ItemGroup>
     <Folder Include="Enums\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CloudObjects.Service\CloudObjects.Service.csproj" />
   </ItemGroup>
 
 

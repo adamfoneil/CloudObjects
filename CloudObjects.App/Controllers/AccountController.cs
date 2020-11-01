@@ -2,6 +2,7 @@
 using CloudObjects.App.Services;
 using CloudObjects.Client.Models;
 using CloudObjects.Models;
+using CloudObjects.Service.Models;
 using Dapper.CX.SqlServer.AspNetCore.Extensions;
 using Dapper.CX.SqlServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

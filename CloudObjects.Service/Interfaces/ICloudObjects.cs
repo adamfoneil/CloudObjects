@@ -5,7 +5,7 @@ using Refit;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CloudObjects.Client.Interfaces
+namespace CloudObjects.Service.Interfaces
 {
     [Headers("Authorization: Bearer")]
     internal interface ICloudObjects

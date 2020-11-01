@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace CloudObjects.Client.Interfaces
+namespace CloudObjects.Service.Interfaces
 {
     public interface ITokenSaver
     {
