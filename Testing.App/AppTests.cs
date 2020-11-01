@@ -1,4 +1,5 @@
 ﻿using CloudObjects.App;
+using CloudObjects.Client.Models;
 using CloudObjects.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace Testing.App
@@ -29,27 +31,32 @@ namespace Testing.App
             });
         }
 
-        private static IHostBuilder CreateHostBuilder() =>
-            Host.CreateDefaultBuilder()
-                .ConfigureAppConfiguration(configure =>
-                {
-                    configure
-                        .AddJsonFile("Config/appsettings.json")
-                        .AddJsonFile("Config/connection.json")
-                        .AddEnvironmentVariables();
-                })
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-
         [TestMethod]
-        public void CreateAccount()
+        public void CreateAndDeleteAccount()
         {
-            var result = _client.PostAsync("/api/Account?name=hello-account", null).Result;
+            var result = _client.PostAsync($"/api/Account?name=sample-1239", null).Result;
+            Assert.IsTrue(result.IsSuccessStatusCode);
+
             var account = result.Content.ReadFromJsonAsync<Account>().Result;
             Assert.IsTrue(account.Id != 0);
+            
+            SetToken(account);
+
+            result = _client.DeleteAsync("/api/Account").Result;
+            Assert.IsTrue(result.IsSuccessStatusCode);
         }
 
+        private void SetToken(Account account)
+        {
+            var result = _client.PostAsJsonAsync("/api/Account/Token", new ApiCredentials()
+            {
+                AccountName = account.Name,
+                AccountKey = account.Key
+            }).Result;
+            var token = result.Content.ReadAsStringAsync().Result;
+            
+            _client.DefaultRequestHeaders.Clear();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);            
+        }
     }
 }
