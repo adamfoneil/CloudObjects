@@ -1,4 +1,4 @@
-﻿namespace CloudObjects.Client.Models
+﻿namespace CloudObjects.Service.Models
 {
     public class ApiCredentials
     {

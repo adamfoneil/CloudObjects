@@ -19,7 +19,6 @@
     <Compile Include="..\CloudObjects.Models\Conventions\AuditedTable.cs" Link="Models\Server\Conventions\AuditedTable.cs" />
     <Compile Include="..\CloudObjects.Models\Conventions\BaseTable.cs" Link="Models\Server\Conventions\BaseTable.cs" />
     <Compile Include="..\CloudObjects.Models\Enums\ListStoredObjectsSortOptions.cs" Link="Enums\ListStoredObjectsSortOptions.cs" />
-    <Compile Include="..\CloudObjects.Models\Interfaces\IListObjectsQuery.cs" Link="Interfaces\IListObjectsQuery.cs" />
     <Compile Include="..\CloudObjects.Models\StoredObject.cs" Link="Models\Server\StoredObject.cs" />
   </ItemGroup>
 

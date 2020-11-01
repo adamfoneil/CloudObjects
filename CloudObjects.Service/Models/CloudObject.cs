@@ -2,7 +2,7 @@
 using System;
 using System.Text.Json;
 
-namespace CloudObjects.Client.Models
+namespace CloudObjects.Service.Models
 {
     public class CloudObject<T>
     {
