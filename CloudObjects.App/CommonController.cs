@@ -29,6 +29,7 @@ namespace CloudObjects.App
         protected long AccountId { get; }
         protected DapperCX<long> Data { get; }
 
+        /*
         protected async Task<IActionResult> TryAsync<T>(Func<Task<T>> func)
         {
             try
@@ -40,6 +41,6 @@ namespace CloudObjects.App
             {
                 return BadRequest(exc.Message);
             }
-        }
+        }*/
     }
 }

@@ -1,4 +1,5 @@
 using CloudObjects.App.Extensions;
+using CloudObjects.App.Filters;
 using Dapper.CX.SqlServer.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -31,7 +32,10 @@ namespace CloudObjects.App
         {            
             // built-in services
             services.AddControllers();
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new ExceptionFilter());
+            });
             services.AddHttpContextAccessor();
             services.AddHttpContext();
 
@@ -57,7 +61,7 @@ namespace CloudObjects.App
             app.UseRouting();
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseAuthorization();            
 
             app.UseEndpoints(endpoints =>
             {
