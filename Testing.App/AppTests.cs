@@ -38,13 +38,13 @@ namespace Testing.App
             var account = result.Content.ReadFromJsonAsync<Account>().Result;
             Assert.IsTrue(account.Id != 0);
             
-            SetToken(account);
+            Login(account);
 
             result = _client.DeleteAsync("/api/Account").Result;
             Assert.IsTrue(result.IsSuccessStatusCode);
         }
 
-        private void SetToken(Account account)
+        private void Login(Account account)
         {
             var result = _client.PostAsJsonAsync("/api/Account/Token", new ApiCredentials()
             {
