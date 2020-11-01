@@ -13,19 +13,15 @@ using System.Threading.Tasks;
 
 namespace CloudObjects.Service
 {
-    public class AccountService
+    public class AccountService : ServiceBase
     {
-        private readonly TokenGenerator _tokenGenerator;
-        private readonly DapperCX<long> _data;        
+        private readonly TokenGenerator _tokenGenerator;        
 
-        public AccountService(HttpContext httpContext, TokenGenerator tokenGenerator, DapperCX<long> data)
-        {
-            AccountId = httpContext?.GetAccountId() ?? 0;
+        public AccountService(HttpContext httpContext, TokenGenerator tokenGenerator, DapperCX<long> data) : base(httpContext, data)
+        {        
             _tokenGenerator = tokenGenerator;
-            _data = data;
-        }
 
-        public long AccountId { get; }
+        }
 
         public async Task<IActionResult> Token(ApiCredentials login)
         {
@@ -41,7 +37,7 @@ namespace CloudObjects.Service
                 Key = GetKey(),
                 InvoiceDate = DateTime.UtcNow.AddDays(30)
             };
-            await _data.InsertAsync(account);
+            await Data.InsertAsync(account);
             return new OkObjectResult(account);
         }
 
@@ -52,15 +48,15 @@ namespace CloudObjects.Service
                 Name = newName,
                 Id = AccountId
             };
-            await _data.UpdateAsync(acct);
+            await Data.UpdateAsync(acct);
             return new OkObjectResult(acct);
         }
 
         public async Task<IActionResult> Delete()
         {
             // note this works only if you don't have any objects in your account; delete does not cascade
-            await new DeleteAccountActivity() { AccountId = AccountId }.ExecuteAsync(_data.GetConnection);            
-            await _data.DeleteAsync<Account>(AccountId);
+            await new DeleteAccountActivity() { AccountId = AccountId }.ExecuteAsync(Data.GetConnection);            
+            await Data.DeleteAsync<Account>(AccountId);
             return new OkResult();
         }
 

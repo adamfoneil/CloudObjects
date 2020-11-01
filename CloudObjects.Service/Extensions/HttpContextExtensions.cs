@@ -23,15 +23,5 @@ namespace CloudObjects.Service.Extensions
             // apply the type conversion to get our result in the type we need it to be
             return convert.Invoke(claimValue);
         }
-
-        public static long GetAccountId(this HttpContext context)
-        {
-            if (context?.User.Claims.Any() ?? false)
-            {
-                return context.GetClaim(TokenGenerator.AccountIdClaim, (value) => Convert.ToInt64(value));
-            }
-
-            return default;
-        }
     }
 }

@@ -45,6 +45,7 @@ namespace CloudObjects.App
             var jwtSecret = Configuration["Jwt:Secret"];
 
             services.AddScoped<AccountService>();
+            services.AddScoped<ObjectsService>();
             services.AddDapperCX(connectionString, (id) => Convert.ToInt64(id));
             services.AddTokenGenerator(jwtSecret);
             services.AddCloudObjectsAuthentication(jwtSecret);
