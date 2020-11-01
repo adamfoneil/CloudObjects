@@ -1,10 +1,7 @@
 ﻿using CloudObjects.App;
 using CloudObjects.Client.Models;
 using CloudObjects.Models;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Net.Http;
@@ -15,6 +12,7 @@ namespace Testing.App
 {
     /// <summary>
     /// help from https://docs.microsoft.com/en-us/dotnet/architecture/microservices/multi-container-microservice-net-applications/test-aspnet-core-services-web-apps
+    /// https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-3.1
     /// </summary>
     [TestClass]
     public class AppTests
