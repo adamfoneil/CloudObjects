@@ -1,8 +1,12 @@
-﻿using CloudObjects.Client;
+﻿using CloudObjects.App;
+using CloudObjects.Client;
 using CloudObjects.Client.Models;
 using CloudObjects.Client.Static;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
+using System.Net.Http;
 using System.Text.Json;
 using Testing.Client.Models;
 using Testing.Client.Static;
@@ -18,6 +22,18 @@ namespace Testing
     {
         const string testAccount = "sample1238";
 
+        private readonly WebApplicationFactory<Startup> _factory;
+        private readonly HttpClient _client;
+
+        public ApiClientAuthTests()
+        {
+            _factory = new WebApplicationFactory<Startup>();
+            _client = _factory.CreateClient(new WebApplicationFactoryClientOptions()
+            {
+                BaseAddress = new Uri("https://localhost:44328")
+            });
+        }
+
         [ClassInitialize]
         public static void Initialize(TestContext context)
         {
@@ -26,8 +42,8 @@ namespace Testing
 
         private CloudObjectsClient GetClient()
         {
-            var account = DbUtil.GetTestAccountAsync(testAccount, ConfigHelper.GetConnection).Result;
-            var client = new CloudObjectsClient(HostLocations.Local, account.Name, account.Key);
+            var account = DbUtil.GetTestAccountAsync(_client, testAccount, ConfigHelper.GetConnection).Result;
+            var client = new CloudObjectsClient(_client, new ApiCredentials(account.Name, account.Key));
 
             // token saver doesn't work in these tests because we keep re-building the test account with a new Id, which breaks any saved token
             //client.TokenSaver = new DbTokenSaver(() => LocalDb.GetConnection("CloudObjects"));

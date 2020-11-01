@@ -4,6 +4,7 @@ using CloudObjects.Models;
 using Dapper;
 using System;
 using System.Data;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Testing.Client.Static
@@ -30,7 +31,7 @@ namespace Testing.Client.Static
             }
         }
 
-        internal static async Task<Account> GetTestAccountAsync(string testAccount, Func<IDbConnection> getConnection)
+        internal static async Task<Account> GetTestAccountAsync(HttpClient httpClient, string testAccount, Func<IDbConnection> getConnection)
         {
             using (var cn = getConnection.Invoke())
             {
@@ -38,7 +39,7 @@ namespace Testing.Client.Static
 
                 if (result == null)
                 {
-                    var client = new CloudObjectsClient(HostLocations.Local);
+                    var client = new CloudObjectsClient(httpClient);
                     result = await client.CreateAccountAsync(testAccount);
                 }
 

@@ -5,6 +5,7 @@ using CloudObjects.Models;
 using Refit;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -14,9 +15,25 @@ namespace CloudObjects.Client
     {
         private readonly ApiCredentials _credentials;
         private readonly ICloudObjects _api = null;
-        private readonly HostLocations _location;
+        private readonly HostLocations _location;        
 
         private string _token = null;
+
+        private RefitSettings GetRefitSettings() => new RefitSettings()
+        {
+            AuthorizationHeaderValueGetter = () => Task.FromResult(_token)
+        };
+
+        public CloudObjectsClient(HttpClient client, ApiCredentials credentials)
+        {            
+            _credentials = credentials;
+            _api = RestService.For<ICloudObjects>(client, GetRefitSettings());
+        }
+
+        public CloudObjectsClient(HttpClient client)
+        {
+            _api = RestService.For<ICloudObjects>(client, GetRefitSettings());
+        }
 
         public CloudObjectsClient(string accountName, string accountKey) : this(HostLocations.Online, new ApiCredentials(accountName, accountKey))
         {
@@ -30,10 +47,7 @@ namespace CloudObjects.Client
         {
             _credentials = credentials;
             _location = location;
-            _api = RestService.For<ICloudObjects>(Host.Urls[location], new RefitSettings()
-            {
-                AuthorizationHeaderValueGetter = () => Task.FromResult(_token)
-            });
+            _api = RestService.For<ICloudObjects>(Host.Urls[location], GetRefitSettings());
         }
         
         public ITokenSaver TokenSaver { get; set; }
