@@ -29,55 +29,51 @@ namespace CloudObjects.App.Controllers
         }
 
         [HttpPost]
-        [Route("Token")]        
+        [Route("Token")]
         [AllowAnonymous]
-        public async Task<IActionResult> Token([FromBody] ApiCredentials login)
-        {
-            try
+        public async Task<IActionResult> Token([FromBody] ApiCredentials login) => 
+            await TryAsync(async () =>
             {
-                string token = await _tokenGenerator.GetTokenAsync(login.AccountName, login.AccountKey);
-                return Ok(token);
-            }
-            catch (Exception exc)
-            {
-                return BadRequest(exc.Message);
-            }
-        }
+                return await _tokenGenerator.GetTokenAsync(login.AccountName, login.AccountKey);                
+            });
 
-        [HttpPost]        
+        [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Post(string name)
-        {
-            var account = new Account()
+        public async Task<IActionResult> Post(string name) =>
+            await TryAsync(async () =>
             {
-                Name = name,
-                Key = GetKey(),
-                InvoiceDate = DateTime.UtcNow.AddDays(30)
-            };            
-            await Data.InsertAsync(account);
-            return Ok(account);
-        }
+                var account = new Account()
+                {
+                    Name = name,
+                    Key = GetKey(),
+                    InvoiceDate = DateTime.UtcNow.AddDays(30)
+                };
+                await Data.InsertAsync(account);
+                return account;
+            });
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromQuery]string newName)
-        {
-            var acct = new Account()
+        public async Task<IActionResult> Put([FromQuery] string newName) =>
+            await TryAsync(async () =>
             {
-                Name = newName,
-                Id = AccountId
-            };            
-            await Data.UpdateAsync(acct);
-            return Ok(acct);
-        }
+                var acct = new Account()
+                {
+                    Name = newName,
+                    Id = AccountId
+                };
+                await Data.UpdateAsync(acct);
+                return acct;
+            });
 
-        [HttpDelete]        
-        public async Task<IActionResult> Delete()
-        {
-            // note this works only if you don't have any objects in your account; delete does not cascade
-            await Data.QueryAsync(new DeleteAccountActivity() { AccountId = AccountId });
-            await Data.DeleteAsync<Account>(AccountId);
-            return Ok();
-        }
+        [HttpDelete]
+        public async Task<IActionResult> Delete() =>
+            await TryAsync(async () =>
+            {
+                // note this works only if you don't have any objects in your account; delete does not cascade
+                await Data.QueryAsync(new DeleteAccountActivity() { AccountId = AccountId });
+                await Data.DeleteAsync<Account>(AccountId);
+                return true;
+            });
 
         private static string GetKey()
         {

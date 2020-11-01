@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CloudObjects.App
 {
@@ -27,5 +28,18 @@ namespace CloudObjects.App
 
         protected long AccountId { get; }
         protected DapperCX<long> Data { get; }
+
+        protected async Task<IActionResult> TryAsync<T>(Func<Task<T>> func)
+        {
+            try
+            {
+                var result = await func.Invoke();
+                return Ok(result);
+            }
+            catch (Exception exc)
+            {
+                return BadRequest(exc.Message);
+            }
+        }
     }
 }
