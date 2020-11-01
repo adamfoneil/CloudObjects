@@ -1,15 +1,10 @@
-﻿using CloudObjects.App.Extensions;
-using CloudObjects.App.Queries;
-using CloudObjects.App.Services;
+﻿using CloudObjects.App.Queries;
 using CloudObjects.Models;
 using Dapper.CX.Classes;
 using Dapper.CX.SqlServer.AspNetCore.Extensions;
 using Dapper.CX.SqlServer.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 using System.Web;
 

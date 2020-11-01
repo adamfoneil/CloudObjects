@@ -5,9 +5,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper.CX.SqlServer" Version="1.3.11" />
+    <Compile Include="..\CloudObjects.Models\Account.cs" Link="Models\Server\Account.cs" />
+    <Compile Include="..\CloudObjects.Models\Activity.cs" Link="Models\Server\Activity.cs" />
+    <Compile Include="..\CloudObjects.Models\Conventions\AuditedTable.cs" Link="Models\Server\Conventions\AuditedTable.cs" />
+    <Compile Include="..\CloudObjects.Models\Conventions\BaseTable.cs" Link="Models\Server\Conventions\BaseTable.cs" />
+    <Compile Include="..\CloudObjects.Models\Enums\ListStoredObjectsSortOptions.cs" Link="Enums\ListStoredObjectsSortOptions.cs" />
+    <Compile Include="..\CloudObjects.Models\Interfaces\IListObjectsQuery.cs" Link="Interfaces\IListObjectsQuery.cs" />
+    <Compile Include="..\CloudObjects.Models\StoredObject.cs" Link="Models\Server\StoredObject.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AO.StringId" Version="1.0.2" />
+    <PackageReference Include="Dapper.CX.SqlServer" Version="1.3.12" />
+    <PackageReference Include="Dapper.QX" Version="1.0.19" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Refit" Version="5.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Enums\" />
   </ItemGroup>
 
 </Project>

@@ -5,14 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\CloudObjects.Client\Models\ApiCredentials.cs" Link="Models\ApiCredentials.cs" />
-    <Compile Include="..\CloudObjects.Models\Account.cs" Link="Models\Account.cs" />
-    <Compile Include="..\CloudObjects.Models\Activity.cs" Link="Models\Activity.cs" />
-    <Compile Include="..\CloudObjects.Models\Conventions\AuditedTable.cs" Link="Models\Conventions\AuditedTable.cs" />
-    <Compile Include="..\CloudObjects.Models\Conventions\BaseTable.cs" Link="Models\Conventions\BaseTable.cs" />
     <Compile Include="..\CloudObjects.Models\Enums\ListStoredObjectsSortOptions.cs" Link="Enums\ListStoredObjectsSortOptions.cs" />
-    <Compile Include="..\CloudObjects.Models\Interfaces\IListObjectsQuery.cs" Link="Interfaces\IListObjectsQuery.cs" />
-    <Compile Include="..\CloudObjects.Models\StoredObject.cs" Link="Models\StoredObject.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Enums\" />
-    <Folder Include="Interfaces\" />
+    <Folder Include="Queries\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

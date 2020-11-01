@@ -1,4 +1,4 @@
-﻿using CloudObjects.Client.Interfaces;
+﻿using CloudObjects.Service.Interfaces;
 using Dapper.CX.Abstract;
 using System;
 using System.Data;

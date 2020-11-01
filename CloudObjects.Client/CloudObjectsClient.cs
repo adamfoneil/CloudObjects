@@ -1,7 +1,8 @@
-﻿using CloudObjects.Client.Interfaces;
-using CloudObjects.Client.Models;
+﻿using CloudObjects.Client.Models;
 using CloudObjects.Client.Static;
 using CloudObjects.Models;
+using CloudObjects.Service.Interfaces;
+using CloudObjects.Service.Models;
 using Refit;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,11 +1,9 @@
-﻿using CloudObjects.App.Queries;
-using CloudObjects.App.Services;
-using CloudObjects.Client.Models;
-using CloudObjects.Models;
+﻿using CloudObjects.Models;
+using CloudObjects.Service;
 using CloudObjects.Service.Models;
+using CloudObjects.Service.Queries;
 using Dapper.CX.SqlServer.AspNetCore.Extensions;
 using Dapper.CX.SqlServer.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,51 +16,28 @@ namespace CloudObjects.App.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class AccountController : CommonController
-    {
-        private readonly TokenGenerator _tokenGenerator;
+    {        
+        private readonly AccountService _accountService;
 
         public AccountController(
             HttpContext httpContext,
-            TokenGenerator tokenGenerator,
+            AccountService accountService,
             DapperCX<long> data) : base(httpContext, data)
         {
-            _tokenGenerator = tokenGenerator;
+            _accountService = accountService;
         }
 
         [HttpPost]
         [Route("Token")]
         [AllowAnonymous]
-        public async Task<IActionResult> Token([FromBody] ApiCredentials login)
-        {
-            var result = await _tokenGenerator.GetTokenAsync(login.AccountName, login.AccountKey);
-            return Ok(result);
-        }
+        public async Task<IActionResult> Token([FromBody] ApiCredentials login) => await _accountService.Token(login);
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Post(string name)
-        {
-            var account = new Account()
-            {
-                Name = name,
-                Key = GetKey(),
-                InvoiceDate = DateTime.UtcNow.AddDays(30)
-            };
-            await Data.InsertAsync(account);
-            return Ok(account);
-        }
+        public async Task<IActionResult> Post(string name) => await _accountService.Post(name);
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromQuery] string newName)
-        {
-            var acct = new Account()
-            {
-                Name = newName,
-                Id = AccountId
-            };
-            await Data.UpdateAsync(acct);
-            return Ok(acct);
-        }
+        public async Task<IActionResult> Put([FromQuery] string newName) => await _accountService.Put(newName);
 
         [HttpDelete]
         public async Task<IActionResult> Delete()
@@ -72,10 +47,5 @@ namespace CloudObjects.App.Controllers
             await Data.DeleteAsync<Account>(AccountId);
             return Ok();
         }
-
-        private static string GetKey()
-        {
-            return StringId.New(50, StringIdRanges.Lower | StringIdRanges.Upper | StringIdRanges.Numeric | StringIdRanges.Special);
-        }       
     }
 }

@@ -1,6 +1,6 @@
-﻿using CloudObjects.Client.Models;
-using CloudObjects.Interfaces;
+﻿using CloudObjects.Interfaces;
 using CloudObjects.Models;
+using CloudObjects.Service.Models;
 using Refit;
 using System.Collections.Generic;
 using System.Threading.Tasks;

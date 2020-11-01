@@ -1,5 +1,4 @@
 ﻿using CloudObjects.Models;
-using Dapper.CX.Classes;
 using Dapper.CX.SqlServer.Services;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -8,7 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CloudObjects.App.Services
+namespace CloudObjects.Service
 {
     public class TokenGenerator
     {

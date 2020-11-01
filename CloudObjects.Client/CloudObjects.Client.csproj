@@ -19,7 +19,13 @@
     <Compile Include="..\CloudObjects.Models\Conventions\AuditedTable.cs" Link="Models\Server\Conventions\AuditedTable.cs" />
     <Compile Include="..\CloudObjects.Models\Conventions\BaseTable.cs" Link="Models\Server\Conventions\BaseTable.cs" />
     <Compile Include="..\CloudObjects.Models\Enums\ListStoredObjectsSortOptions.cs" Link="Enums\ListStoredObjectsSortOptions.cs" />
+    <Compile Include="..\CloudObjects.Models\Interfaces\IListObjectsQuery.cs" Link="Interfaces\IListObjectsQuery.cs" />
     <Compile Include="..\CloudObjects.Models\StoredObject.cs" Link="Models\Server\StoredObject.cs" />
+    <Compile Include="..\CloudObjects.Service\Interfaces\ICloudObjects.cs" Link="Interfaces\ICloudObjects.cs" />
+    <Compile Include="..\CloudObjects.Service\Interfaces\ITokenSaver.cs" Link="Interfaces\ITokenSaver.cs" />
+    <Compile Include="..\CloudObjects.Service\Models\ApiCredentials.cs" Link="Models\ApiCredentials.cs" />
+    <Compile Include="..\CloudObjects.Service\Models\CloudObject.cs" Link="Models\CloudObject.cs" />
+    <Compile Include="..\CloudObjects.Service\Models\ListObjectsQuery.cs" Link="Models\ListObjectsQuery.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +36,7 @@
   <ItemGroup>
     <Folder Include="Models\Server\Conventions\" />
     <Folder Include="Enums\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>

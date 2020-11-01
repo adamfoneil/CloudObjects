@@ -1,6 +1,6 @@
 ﻿using Dapper.QX;
 
-namespace CloudObjects.App.Queries
+namespace CloudObjects.Service.Queries
 {
     public class DeleteAccountActivity : Query<int>
     {
