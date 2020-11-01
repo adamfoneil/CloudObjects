@@ -1,4 +1,4 @@
-﻿using CloudObjects.App.Extensions;
+﻿using CloudObjects.Service.Extensions;
 using CloudObjects.Service;
 using Dapper.CX.SqlServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

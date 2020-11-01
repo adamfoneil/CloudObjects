@@ -1,5 +1,6 @@
 using CloudObjects.App.Extensions;
 using CloudObjects.App.Filters;
+using CloudObjects.Service;
 using Dapper.CX.SqlServer.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -43,6 +44,7 @@ namespace CloudObjects.App
             var connectionString = Configuration.GetConnectionString("Default");
             var jwtSecret = Configuration["Jwt:Secret"];
 
+            services.AddScoped<AccountService>();
             services.AddDapperCX(connectionString, (id) => Convert.ToInt64(id));
             services.AddTokenGenerator(jwtSecret);
             services.AddCloudObjectsAuthentication(jwtSecret);

@@ -1,10 +1,14 @@
 ﻿using CloudObjects.Models;
+using CloudObjects.Service.Extensions;
 using CloudObjects.Service.Models;
 using CloudObjects.Service.Queries;
 using Dapper.CX.SqlServer.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StringIdLibrary;
 using System;
+using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace CloudObjects.Service
@@ -12,15 +16,16 @@ namespace CloudObjects.Service
     public class AccountService
     {
         private readonly TokenGenerator _tokenGenerator;
-        private readonly DapperCX<long> _data;
-        private readonly long _accountId;
+        private readonly DapperCX<long> _data;        
 
-        public AccountService(long accountId, TokenGenerator tokenGenerator, DapperCX<long> data)
+        public AccountService(HttpContext httpContext, TokenGenerator tokenGenerator, DapperCX<long> data)
         {
-            _accountId = accountId;
+            AccountId = httpContext?.GetAccountId() ?? 0;
             _tokenGenerator = tokenGenerator;
             _data = data;
         }
+
+        public long AccountId { get; }
 
         public async Task<IActionResult> Token(ApiCredentials login)
         {
@@ -45,7 +50,7 @@ namespace CloudObjects.Service
             var acct = new Account()
             {
                 Name = newName,
-                Id = _accountId
+                Id = AccountId
             };
             await _data.UpdateAsync(acct);
             return new OkObjectResult(acct);
@@ -54,8 +59,8 @@ namespace CloudObjects.Service
         public async Task<IActionResult> Delete()
         {
             // note this works only if you don't have any objects in your account; delete does not cascade
-            await new DeleteAccountActivity() { AccountId = _accountId }.ExecuteAsync(_data.GetConnection);            
-            await _data.DeleteAsync<Account>(_accountId);
+            await new DeleteAccountActivity() { AccountId = AccountId }.ExecuteAsync(_data.GetConnection);            
+            await _data.DeleteAsync<Account>(AccountId);
             return new OkResult();
         }
 

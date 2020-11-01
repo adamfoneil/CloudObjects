@@ -3,26 +3,19 @@ using CloudObjects.Service;
 using CloudObjects.Service.Models;
 using CloudObjects.Service.Queries;
 using Dapper.CX.SqlServer.AspNetCore.Extensions;
-using Dapper.CX.SqlServer.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using StringIdLibrary;
-using System;
 using System.Threading.Tasks;
 
 namespace CloudObjects.App.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountController : CommonController
+    public class AccountController : ControllerBase
     {        
         private readonly AccountService _accountService;
 
-        public AccountController(
-            HttpContext httpContext,
-            AccountService accountService,
-            DapperCX<long> data) : base(httpContext, data)
+        public AccountController(AccountService accountService)
         {
             _accountService = accountService;
         }
@@ -40,12 +33,6 @@ namespace CloudObjects.App.Controllers
         public async Task<IActionResult> Put([FromQuery] string newName) => await _accountService.Put(newName);
 
         [HttpDelete]
-        public async Task<IActionResult> Delete()
-        {
-            // note this works only if you don't have any objects in your account; delete does not cascade
-            await Data.QueryAsync(new DeleteAccountActivity() { AccountId = AccountId });
-            await Data.DeleteAsync<Account>(AccountId);
-            return Ok();
-        }
+        public async Task<IActionResult> Delete() => await _accountService.Delete();
     }
 }
