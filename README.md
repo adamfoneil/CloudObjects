@@ -39,4 +39,4 @@ When you run the application locally for the first time, you should see this mes
 
 ![img](https://adamosoftware.blob.core.windows.net:443/images/cloud-obj.png)
 
-The code that creates the tables is [here](https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.App/Controllers/HomeController.cs#L64). It uses my [ModelSync](https://github.com/adamfoneil/ModelSync) project.
+The code that creates the tables is [here](https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.App/Controllers/HomeController.cs#L69). It uses my [ModelSync](https://github.com/adamfoneil/ModelSync) project.
