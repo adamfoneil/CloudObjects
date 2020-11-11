@@ -70,21 +70,30 @@ public class MyObjectType
 }
 </pre>
 
-<p class="my-3">To retrieve an object, use the <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/CloudObjectsClient.cs#L96">GetAsync</a> method like this. This
-    will give you a <code>CloudObject&lt;T&gt;</code>. From this you use the <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/Models/CloudObject.cs#L25">Object</a>
-    property to access your original object.</p>
+<p class="my-3">To retrieve an object, use the <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/CloudObjectsClient.cs#L96">GetAsync</a> method like this.
 
 <pre class="my-3">
 var client = new CloudObjectsClient("test-account-479", "your key");
 var obj = await client.GetAsync&lt;MyObjectType&gt;("object1");
+Console.WriteLine($"First name = {obj.FirstName}");
+Console.WriteLine($"Last name = {obj.LastName}");
+Console.WriteLine($"Greeting = {obj.Greeting}");
+</pre>
+
+
+<p class="my-3">To retrieve an object along with its <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/Models/CloudObject.cs#L25-L31">related metadata</a>, use the <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/CloudObjectsClient.cs#L102">GetCloudObjectAsync</a> method.</p>
+<pre class="my-3">
+var client = new CloudObjectsClient("test-account-479", "your key");
+var obj = await client.GetCloudObjectAsync&lt;MyObjectType&gt;("object1");
+
+// cloud object metdatata -- note that timestamps are UTC time
+Console.WriteLine($"Id = {obj.Id}");
+Coneole.WriteLine($"DateCreated = {obj.DateCreated}");
+Coneole.WriteLine($"DateModified = {obj.DateModified}");
+
+// object itself accessed through the Object property
 Console.WriteLine($"First name = {obj.Object.FirstName}");
 Console.WriteLine($"Last name = {obj.Object.LastName}");
 Console.WriteLine($"Greeting = {obj.Object.Greeting}");
 </pre>
-</section>
-
-<section class="section">
-    <h1 class="title is-size-4 has-text-centered">Using the <a href="/swagger">Swagger</a> Page</h1>
-    <p class="my-3">Use the Swagger page to try out the live API methods and get actual results.
-    There are few little things to know about it, so I made this little walkthrough.</p>
 </section>
