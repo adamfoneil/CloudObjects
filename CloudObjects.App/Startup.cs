@@ -55,6 +55,7 @@ namespace CloudObjects.App
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

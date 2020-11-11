@@ -1,5 +1,4 @@
-﻿@using CloudObjects.App.Extensions 
-@model CloudObjects.App.ViewModels.HomeView
+﻿@model CloudObjects.App.ViewModels.HomeView
 
 @{ 
     ViewBag.Title = "CloudObjects API";
@@ -20,13 +19,12 @@
     <p class="my-3">First, install the <a href="https://www.nuget.org/packages/AO.CloudObjects.Client">NuGet package</a> in your poject.</p>
     <p class="my-3">Then, if you haven't done so already, create an account and get a key. You can do this programmatically as shown below.</p>
 
-<pre class="my-3">
-var client = new CloudObjectsClient(HostLocations.Online);
+<pre class="my-3"><code class="language-csharp">var client = new CloudObjectsClient(HostLocations.Online);
 var account = await client.CreateAccountAsync("my-storage-account");
 
 // save this key somewhere -- you won't be able to see it again
 Console.WriteLine($"key = {account.Key}");
-</pre>
+</code></pre>
 
 <p class="my-3">... Or you can get a key interactively through the <a href="/swagger">Swagger</a> page using the <code>Account / Post</code> endpoint.</p>
 </section>
@@ -44,8 +42,7 @@ Console.WriteLine($"key = {account.Key}");
         or <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/CloudObjectsClient.cs#L70">CreateAsync</a> methods, 
         you get back a <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/Models/CloudObject.cs">CloudObject&lt;T&gt;</a>.</p>
 
-<pre class="my-3">
-class Program
+<pre class="my-3"><code class="language-csharp">class Program
 {
     static async Task Main(string[] args)
     {
@@ -68,22 +65,20 @@ public class MyObjectType
     public string LastName { get; set; }
     public string Greeting { get; set; }
 }
-</pre>
+</code></pre>
 
 <p class="my-3">To retrieve an object, use the <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/CloudObjectsClient.cs#L96">GetAsync</a> method like this.
 
-<pre class="my-3">
-var client = new CloudObjectsClient("test-account-479", "your key");
+<pre class="my-3"><code class="language-csharp">var client = new CloudObjectsClient("test-account-479", "your key");
 var obj = await client.GetAsync&lt;MyObjectType&gt;("object1");
 Console.WriteLine($"First name = {obj.FirstName}");
 Console.WriteLine($"Last name = {obj.LastName}");
 Console.WriteLine($"Greeting = {obj.Greeting}");
-</pre>
+</code></pre>
 
 
 <p class="my-3">To retrieve an object along with its <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/Models/CloudObject.cs#L25-L31">related metadata</a>, use the <a href="https://github.com/adamfoneil/CloudObjects/blob/master/CloudObjects.Client/CloudObjectsClient.cs#L102">GetCloudObjectAsync</a> method.</p>
-<pre class="my-3">
-var client = new CloudObjectsClient("test-account-479", "your key");
+<pre class="my-3"><code class="language-csharp">var client = new CloudObjectsClient("test-account-479", "your key");
 var obj = await client.GetCloudObjectAsync&lt;MyObjectType&gt;("object1");
 
 // cloud object metdatata -- note that timestamps are UTC time
@@ -95,5 +90,5 @@ Coneole.WriteLine($"DateModified = {obj.DateModified}");
 Console.WriteLine($"First name = {obj.Object.FirstName}");
 Console.WriteLine($"Last name = {obj.Object.LastName}");
 Console.WriteLine($"Greeting = {obj.Object.Greeting}");
-</pre>
+</code></pre>
 </section>

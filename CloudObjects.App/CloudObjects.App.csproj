@@ -28,6 +28,8 @@
   <ItemGroup>
     <Folder Include="Enums\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="wwwroot\js\" />
+    <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
 
