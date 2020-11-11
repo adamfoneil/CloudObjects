@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\CloudObjects.App\Config\connection.json" Link="connection.json" />
+    <Content Include="..\CloudObjects.App\Config\connection.json" Link="Config\connection.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Config\" />
     <Folder Include="Static\" />
   </ItemGroup>
 

@@ -30,8 +30,4 @@
     <ProjectReference Include="..\CloudObjects.Client\CloudObjects.Client.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Config\" />
-  </ItemGroup>
-
 </Project>

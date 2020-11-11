@@ -1,6 +1,7 @@
-{  
+{
+  "TestClientLocation": "Online",
   "ConnectionStrings": {
-    "Default": "Server=(localdb)\\mssqllocaldb;Database=CloudObjects;Integrated Security=true"  
+    "Default": "Server=(localdb)\\mssqllocaldb;Database=CloudObjects;Integrated Security=true"
   },
   "Jwt": {
     "Secret": "{18EBAEBB-F857-43C5-9483-AB9E5A990CAF}"

@@ -2,7 +2,6 @@
 using CloudObjects.Client.Models;
 using CloudObjects.Client.Static;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
 using Testing.Client.Models;
@@ -19,26 +18,9 @@ namespace Testing
     {
         const string testAccount = "sample1238";
 
-        private static Process _process = null;
-
-        [ClassInitialize]
-        public static void Initialize(TestContext context)
-        {
-            var folder = context.TestRunDirectory;
-            DbUtil.DeleteAccount(testAccount, ConfigHelper.GetConnection);
-            //C:\Users\adamo\Source\Repos\CloudObjects\CloudObjects.App\CloudObjects.App.csproj
-            _process = Process.Start(@"C:\Program Files (x86)\dotnet\dotnet.exe", "run C:\\Users\\adamo\\Source\\Repos\\CloudObjects\\CloudObjects.App\\CloudObjects.App.csproj");
-        }
-
-        [ClassCleanup]
-        public static void Cleanup()
-        {
-            _process.Kill();
-        }
-
         private CloudObjectsClient GetClient()
         {
-            var account = DbUtil.GetTestAccountAsync(testAccount, ConfigHelper.GetConnection).Result;
+            var account = DbUtil.GetTestAccountAsync(testAccount, ConfigHelper.GetConnection).Result;            
             var client = new CloudObjectsClient(HostLocations.Local, account.Name, account.Key);
 
             // token saver doesn't work in these tests because we keep re-building the test account with a new Id, which breaks any saved token

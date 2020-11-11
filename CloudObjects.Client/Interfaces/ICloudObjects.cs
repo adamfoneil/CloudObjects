@@ -39,5 +39,11 @@ namespace CloudObjects.Client.Interfaces
 
         [Put("/api/Objects/Rename?oldName={oldName}&newName={newName}")]
         Task RenameObjectAsync(string oldName, string newName);
+
+        [Delete("/api/Objects/DeleteAll")]
+        Task DeleteAllObjectsAsync();
+
+        [Delete("/api/Account")]
+        Task DeleteAccountAsync();
     }
 }

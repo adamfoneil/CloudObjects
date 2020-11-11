@@ -44,7 +44,7 @@ namespace CloudObjects.App.Controllers
         }
 
         [HttpPut]
-        [Route("rename")]
+        [Route("Rename")]
         public async Task<IActionResult> Put([FromQuery]string oldName, [FromQuery]string newName)
         {
             oldName = HttpUtility.UrlDecode(oldName);
@@ -70,7 +70,7 @@ namespace CloudObjects.App.Controllers
         }
 
         [HttpGet]
-        [Route("exists/{name}")]
+        [Route("Exists/{name}")]
         public async Task<IActionResult> Exists([FromRoute]string name)
         {
             name = HttpUtility.UrlDecode(name);
@@ -89,8 +89,16 @@ namespace CloudObjects.App.Controllers
             return Ok();
         }
 
+        [HttpDelete]
+        [Route("DeleteAll")]
+        public async Task<IActionResult> DeleteAll()
+        {
+            await Data.QueryAsync(new DeleteAllObjects() { AccountId = AccountId });
+            return Ok();
+        }
+
         [HttpPost]
-        [Route("list")]
+        [Route("List")]
         public async Task<IActionResult> List(ListStoredObjects query)
         {
             query.AccountId = AccountId;
