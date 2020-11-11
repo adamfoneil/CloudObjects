@@ -53,7 +53,7 @@ namespace CloudObjects.Client
 
             if (TokenSaver != null)
             {
-                await TokenSaver?.SaveAsync(_credentials.AccountName, _token);
+                await TokenSaver.SaveAsync(_credentials.AccountName, _token);
             }
         }
 
@@ -93,7 +93,13 @@ namespace CloudObjects.Client
             return new CloudObject<T>(@object, result);
         }
 
-        public async Task<CloudObject<T>> GetAsync<T>(string name)
+        public async Task<T> GetAsync<T>(string name)
+        {
+            var result = await GetCloudObjectAsync<T>(name);
+            return (result != null) ? result.Object : default;
+        }
+
+        public async Task<CloudObject<T>> GetCloudObjectAsync<T>(string name)
         {
             await LoginAsync();
 
