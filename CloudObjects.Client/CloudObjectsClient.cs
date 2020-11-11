@@ -35,7 +35,7 @@ namespace CloudObjects.Client
                 AuthorizationHeaderValueGetter = () => Task.FromResult(_token)
             });
         }
-        
+
         public ITokenSaver TokenSaver { get; set; }
 
         public async Task LoginAsync()
@@ -45,11 +45,11 @@ namespace CloudObjects.Client
                 string savedToken = await TokenSaver.GetAsync(_credentials.AccountName);
                 if (!string.IsNullOrEmpty(savedToken)) _token = savedToken;
             }
-            
+
             if (IsLoggedIn()) return;
 
             var api = RestService.For<ICloudObjects>(Host.Urls[_location]);
-            _token = await api.GetTokenAsync(_credentials);            
+            _token = await api.GetTokenAsync(_credentials);
 
             if (TokenSaver != null)
             {
@@ -138,5 +138,17 @@ namespace CloudObjects.Client
             await LoginAsync();
             await _api.RenameObjectAsync(oldName, newName);
         }
+
+        public async Task DeleteAccountAsync()
+        {
+            await LoginAsync();
+            await _api.DeleteAccountAsync();
+        }
+
+        public async Task DeleteAllObjects()
+        {
+            await LoginAsync();
+            await _api.DeleteAllObjectsAsync();
+        }  
     }
 }

@@ -1,11 +1,13 @@
 ﻿using CloudObjects.Client;
 using CloudObjects.Client.Models;
 using CloudObjects.Client.Static;
+using CloudObjects.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using StringIdLibrary;
+using System;
 using System.Linq;
 using System.Text.Json;
 using Testing.Client.Models;
-using Testing.Client.Static;
 using Testing.Static;
 
 namespace Testing
@@ -16,17 +18,43 @@ namespace Testing
     [TestClass]
     public class ApiClientAuthTests
     {
-        const string testAccount = "sample1238";
+        private static HostLocations _location;
+        private static Account _testAccount;
 
-        private CloudObjectsClient GetClient()
+        [ClassInitialize]
+        public static void Initialize(TestContext context)
+        {            
+            _testAccount = GetTestAccount();
+        }
+
+        [ClassCleanup]
+        public static void Cleanup()
         {
-            var account = DbUtil.GetTestAccountAsync(testAccount, ConfigHelper.GetConnection).Result;            
-            var client = new CloudObjectsClient(HostLocations.Local, account.Name, account.Key);
+            var client = GetClient();
+            client.DeleteAllObjects().Wait();
+            client.DeleteAccountAsync().Wait();
+        }
+
+        private static CloudObjectsClient GetClient()
+        {            
+            var client = new CloudObjectsClient(_location, _testAccount.Name, _testAccount.Key);
 
             // token saver doesn't work in these tests because we keep re-building the test account with a new Id, which breaks any saved token
             //client.TokenSaver = new DbTokenSaver(() => LocalDb.GetConnection("CloudObjects"));
 
             return client;
+        }
+
+        /// <summary>
+        /// creates a sample account that will be deleted at the end of the tests
+        /// </summary>        
+        private static Account GetTestAccount()
+        {
+            var locationVal = ConfigHelper.GetConfig()["TestClientLocation"];
+            _location = Enum.Parse<HostLocations>(locationVal);
+            var client = new CloudObjectsClient(_location);
+            var accountName = new StringIdBuilder().Add("test-").Add(8, StringIdRanges.Upper | StringIdRanges.Numeric).Build();
+            return client.CreateAccountAsync(accountName).Result;
         }
 
         [TestMethod]
@@ -150,7 +178,7 @@ namespace Testing
             var client = GetClient();
 
             client.RenameAccountAsync("the-new-name").Wait();
-            client.RenameAccountAsync(testAccount).Wait();
+            client.RenameAccountAsync(_testAccount.Name).Wait();
         }
 
         [TestMethod]

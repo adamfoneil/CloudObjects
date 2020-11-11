@@ -4,12 +4,14 @@ using Dapper.CX.SqlServer.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CloudObjects.App
@@ -63,6 +65,7 @@ namespace CloudObjects.App
             {
                 endpoints.MapControllers();
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapGet("/routes", (context) => ListRoutesAsync(context, endpoints));
             });
 
             app.UseSwagger();
@@ -70,7 +73,29 @@ namespace CloudObjects.App
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-        }        
+        }
+
+        /// <summary>
+        /// for troubleshooting 404 errors that made no sense, idea from
+        /// https://github.com/kobake/AspNetCore.RouteAnalyzer/issues/28
+        /// </summary>
+        private async Task ListRoutesAsync(HttpContext context, IEndpointRouteBuilder endpoints)
+        {
+            context.Response.ContentType = "application/json";
+
+            var routes = endpoints.DataSources.SelectMany(ds => ds.Endpoints.OfType<RouteEndpoint>().Select(ep => new
+            {
+                ep.DisplayName,
+                ep.RoutePattern.RawText
+            }));
+
+            var json = JsonSerializer.Serialize(routes, options: new JsonSerializerOptions()
+            {
+                WriteIndented = true
+            });
+
+            await context.Response.WriteAsync(json);
+        }
 
         /*
         removed from app.UseEndpoints
