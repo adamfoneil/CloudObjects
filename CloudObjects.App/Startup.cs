@@ -86,7 +86,8 @@ namespace CloudObjects.App
             var routes = endpoints.DataSources.SelectMany(ds => ds.Endpoints.OfType<RouteEndpoint>().Select(ep => new
             {
                 ep.DisplayName,
-                ep.RoutePattern.RawText
+                ep.RoutePattern.RawText,
+                ep.RoutePattern.PathSegments
             }));
 
             var json = JsonSerializer.Serialize(routes, options: new JsonSerializerOptions()

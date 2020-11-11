@@ -90,7 +90,7 @@ namespace CloudObjects.App.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteAll")]
+        [Route("All")]
         public async Task<IActionResult> DeleteAll()
         {
             await Data.QueryAsync(new DeleteAllObjects() { AccountId = AccountId });

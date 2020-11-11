@@ -145,7 +145,7 @@ namespace Testing
                 FirstName = "yessee",
                 LastName = "whoopsie"
             };
-            var obj = client.SaveAsync("test/hello", content).Result;
+            var obj = client.SaveAsync("test.hello", content).Result;
 
             var fetched = client.GetCloudObjectAsync<SampleObject>(obj.Name).Result;
             Assert.IsTrue(obj.Object.FirstName.Equals(fetched.Object.FirstName));
@@ -164,7 +164,7 @@ namespace Testing
                 FirstName = "yessee",
                 LastName = "whoopsie"
             };
-            var obj = client.SaveAsync("test/hello2", content).Result;
+            var obj = client.SaveAsync("test.hello2", content).Result;
 
             var fetched = client.GetAsync<SampleObject>(obj.Name).Result;
             Assert.IsTrue(obj.Object.FirstName.Equals(fetched.FirstName));
@@ -177,15 +177,15 @@ namespace Testing
         {
             var client = GetClient();
 
-            client.RenameAccountAsync("the-new-name").Wait();
+            client.RenameAccountAsync("the-new-name1").Wait();
             client.RenameAccountAsync(_testAccount.Name).Wait();
         }
 
         [TestMethod]
         public void RenameObject()
         {
-            const string oldName = "test/whatever";
-            const string newName = "test/very-whatever";
+            const string oldName = "test.whatever";
+            const string newName = "test.very-whatever";
 
             var client = GetClient();
             var obj = client.SaveAsync(oldName, new SampleObject()

@@ -2,14 +2,12 @@
 using CloudObjects.Client.Models;
 using CloudObjects.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Data.SqlClient;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Testing.Client.Static;
-using Testing.Static;
 
 namespace Testing.App
 {
@@ -18,14 +16,14 @@ namespace Testing.App
     /// https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-3.1
     /// </summary>
     [TestClass]
-    public class AppTests
+    public class ControllerTests
     {
         private readonly WebApplicationFactory<Startup> _factory;
         private readonly HttpClient _client;
 
         private const string _testAccountName = "sample-1239";
 
-        public AppTests()
+        public ControllerTests()
         {
             _factory = new WebApplicationFactory<Startup>();
             _client = _factory.CreateClient(new WebApplicationFactoryClientOptions()
@@ -56,7 +54,10 @@ namespace Testing.App
             Login(account);
 
             const string data = "{ \"greeting\" : \"hello\" }";
-            const string objName = "sample/hello";
+
+            // important: slashes don't work in names because there's no implicit URL 
+            // encoding going on here that otherwise seems to be automatic in Refit
+            const string objName = "sample.hello";
 
             var result = _client.PostAsJsonAsync("/api/Objects", new StoredObject()
             {
@@ -69,6 +70,9 @@ namespace Testing.App
             var storedObj = result.Content.ReadFromJsonAsync<StoredObject>().Result;
             Assert.IsTrue(storedObj.AccountId == account.Id);
             Assert.IsTrue(storedObj.Name.Equals(objName));
+
+            result = _client.GetAsync($"/api/Objects/{storedObj.Name}").Result;
+            Assert.IsTrue(result.IsSuccessStatusCode);
 
             result = _client.DeleteAsync($"/api/Objects/{storedObj.Name}").Result;
             Assert.IsTrue(result.IsSuccessStatusCode);
