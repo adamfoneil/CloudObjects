@@ -93,10 +93,10 @@ namespace CloudObjects.Client
             return new CloudObject<T>(@object, result);
         }
 
-        public async Task<T> GetAsync<T>(string name)
+        public async Task<T> GetAsync<T>(string name) where T : class
         {
             var result = await GetCloudObjectAsync<T>(name);
-            return (result != null) ? result.Object : default;
+            return result?.Object ?? default;
         }
 
         public async Task<CloudObject<T>> GetCloudObjectAsync<T>(string name)
