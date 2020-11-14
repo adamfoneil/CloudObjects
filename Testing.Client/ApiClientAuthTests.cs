@@ -13,7 +13,8 @@ using Testing.Static;
 namespace Testing
 {
     /// <summary>
-    /// before running, launch an instance of CloudObjects.App locally without debugger (set as startup, then Ctrl+F5)
+    /// before testing locally, launch an instance of CloudObjects.App locally without debugger (set as startup, then Ctrl+F5).
+    /// by default, tests will hit production URL
     /// </summary>
     [TestClass]
     public class ApiClientAuthTests
