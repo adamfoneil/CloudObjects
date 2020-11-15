@@ -21,6 +21,8 @@ I have an instance running here: [CloudObjects](https://cloudobjects.azurewebsit
 
 While reminiscent of things like MongoDB, Redis, Azure Cosmos DB and such, I don't see this being competitive in performance or scale terms. As usual, this is something I simply enjoy working on.
 
+## Video Walkthrough
+I have a PowerPoint where I walk through most of the solution [here](https://1drv.ms/v/s!AvguHRnyJtWMma8dGYw1diRp8Bre4g?e=bCxffe).
 
 ## My Approach
 My solution has three core projects:
