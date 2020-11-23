@@ -1,6 +1,6 @@
-﻿using AO.Models;
-using CloudObjects.Models.Conventions;
-using System;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using CloudObjects.App.Models;
 
 namespace CloudObjects.Models
 {
@@ -11,12 +11,13 @@ namespace CloudObjects.Models
         Delete
     }
 
-    public class Activity : BaseTable
+    [Table(nameof(Activity))]
+    public class Activity : EntityBase<long>
     {
-        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+        public DateTime Timestamp { get; set; }
 
-        [References(typeof(Account))]
         public long AccountId { get; set; }
+        public virtual Account Account { get; set; }
         
         public Operation Operation { get; set; }
 

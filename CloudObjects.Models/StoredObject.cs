@@ -1,18 +1,15 @@
-﻿using AO.Models;
-using AO.Models.Enums;
-using CloudObjects.Models.Conventions;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using CloudObjects.App.Models;
 
 namespace CloudObjects.Models
 {
-    public partial class StoredObject : AuditedTable
+    [Table(nameof(StoredObject))]
+    public class StoredObject : AuditedEntity<long>
     {
-        [References(typeof(Account))]
-        [Key]
-        [SaveAction(SaveAction.Insert)]
         public long AccountId { get; set; }
+        public virtual Account Account { get; set; }
 
-        [Key]
         [MaxLength(512)]
         public string Name { get; set; }
 

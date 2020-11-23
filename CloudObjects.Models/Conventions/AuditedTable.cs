@@ -2,7 +2,7 @@
 
 namespace CloudObjects.Models.Conventions
 {
-    public abstract partial class AuditedTable : BaseTable
+    public abstract class Audited : EntityBase
     {
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
         public DateTime? DateModified { get; set; }

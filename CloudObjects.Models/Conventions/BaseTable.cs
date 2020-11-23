@@ -1,10 +1,9 @@
-﻿using AO.Models;
-
-namespace CloudObjects.Models.Conventions
+﻿namespace CloudObjects.Models
 {
-    [Identity(nameof(Id))]
-    public abstract class BaseTable
+    public abstract class EntityBase
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }        
     }
 }
