@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AO.Models" Version="1.1.23" />
+    <PackageReference Include="AO.Models" Version="1.1.24" />
     <PackageReference Include="Refit" Version="5.2.1" />
   </ItemGroup>
 
