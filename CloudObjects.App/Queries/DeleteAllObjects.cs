@@ -6,7 +6,10 @@ namespace CloudObjects.App.Queries
 {
     public class DeleteAllObjects : TestableQuery<int>
     {
-        public DeleteAllObjects() : base("DELETE [dbo].[StoredObject] WHERE [AccountId]=@accountId")
+        public DeleteAllObjects() : base(
+            @"DELETE [dbo].[Activity] WHERE [AccountId]=@accountId;
+            DELETE [dbo].[StoredObject] WHERE [AccountId]=@accountId;
+            SELECT @@ROWCOUNT")
         {
         }
 
