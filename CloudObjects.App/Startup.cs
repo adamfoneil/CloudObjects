@@ -1,6 +1,5 @@
 using CloudObjects.App.Extensions;
 using CloudObjects.App.Filters;
-using Dapper.CX.SqlServer.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +12,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using CloudObjects.App.Data;
+using CloudObjects.App.Interfaces;
+using CloudObjects.App.Services;
+using FluentValidation.AspNetCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace CloudObjects.App
 {
@@ -29,11 +34,20 @@ namespace CloudObjects.App
         public void ConfigureServices(IServiceCollection services)
         {            
             // built-in services
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson();
+
             services.AddMvc(options =>
-            {
-                options.Filters.Add(new ExceptionFilter());
-            });
+                {
+                    options.Filters.Add(new ExceptionFilter());
+                })
+                .AddFluentValidation(config =>
+                {
+                    config.RegisterValidatorsFromAssemblyContaining<Startup>(filter =>
+                        filter.InterfaceType.FindInterfaces((type, criteria) => type == typeof(IDtoValidator), null)
+                            .Any());
+                });
+
             services.AddHttpContextAccessor();
             services.AddHttpContext();
 
@@ -41,10 +55,15 @@ namespace CloudObjects.App
             var connectionString = Configuration.GetConnectionString("Default");
             var jwtSecret = Configuration["Jwt:Secret"];
 
-            services.AddDapperCX(connectionString, (id) => Convert.ToInt64(id));
+            services.AddDbContextPool<CloudObjectsDbContext>(builder => builder.UseSqlServer(connectionString));
             services.AddTokenGenerator(jwtSecret);
             services.AddCloudObjectsAuthentication(jwtSecret);
             services.AddSwagger();
+
+            services
+                .AddScoped<IAccountService, AccountService>()
+                .AddScoped<IActivityService, ActivityService>()
+                .AddScoped<IStoredObjectService, StoredObjectService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
