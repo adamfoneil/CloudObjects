@@ -1,46 +1,45 @@
-﻿using CloudObjects.App.Extensions;
+﻿using System.Collections.Generic;
 using CloudObjects.App.Queries;
-using CloudObjects.App.Services;
 using CloudObjects.Models;
-using Dapper.CX.Classes;
-using Dapper.CX.SqlServer.AspNetCore.Extensions;
-using Dapper.CX.SqlServer.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 using System.Web;
+using CloudObjects.App.Interfaces;
 
 namespace CloudObjects.App.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]    
     public class ObjectsController : CommonController
-    {      
-        public ObjectsController(   
+    {
+        private readonly IStoredObjectService _storedObjectService;
+
+        public ObjectsController(
             HttpContext httpContext,
-            DapperCX<long> data) : base(httpContext, data)
+            IStoredObjectService storedObjectService) : base(httpContext)
         {
-        }       
+            _storedObjectService = storedObjectService;
+        }
 
         [HttpPost]
-        public async Task<IActionResult> Post(StoredObject @object)
+        public async Task<ActionResult<StoredObject>> Post(StoredObject @object)
         {
             @object.AccountId = AccountId;
             @object.Length = @object.Json.Length;
-            await Data.InsertAsync(@object);
-            return Ok(@object);
+
+            await _storedObjectService.CreateAsync(@object);
+
+            return CreatedAtAction(nameof(Get), new {name = @object.Name}, @object);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(StoredObject @object)
+        public async Task<ActionResult<StoredObject>> Put(StoredObject @object)
         {
             @object.AccountId = AccountId;
             @object.Length = @object.Json.Length;
-            await Data.MergeAsync(@object);
-            return Ok(@object);
+
+            return await _storedObjectService.ReplaceAsync(@object);
         }
 
         [HttpPut]
@@ -50,32 +49,24 @@ namespace CloudObjects.App.Controllers
             oldName = HttpUtility.UrlDecode(oldName);
             newName = HttpUtility.UrlDecode(newName);
 
-            var obj = await Data.GetWhereAsync<StoredObject>(new { AccountId, Name = oldName });
-            if (obj == null) return BadRequest($"Object named {oldName} in account Id {AccountId} not found.");
-
-            var ct = new ChangeTracker<StoredObject>(obj);            
-            obj.Name = newName;
-            await Data.UpdateAsync(obj, ct);                            
-            return Ok();
+            await _storedObjectService.RenameAsync(AccountId, oldName, newName);  
+            return NoContent();
         }
 
         [HttpGet]
         [Route("{name}")]
-        public async Task<IActionResult> Get([FromRoute]string name)
+        public async Task<ActionResult<StoredObject>> Get([FromRoute]string name)
         {
             name = HttpUtility.UrlDecode(name);
-            var result = await Data.GetWhereAsync<StoredObject>(new { accountId = AccountId, name });
-            if (result == null) return BadRequest();
-            return Ok(result);
+            return await _storedObjectService.GetAsync(AccountId, name);
         }
 
         [HttpGet]
         [Route("Exists/{name}")]
-        public async Task<IActionResult> Exists([FromRoute]string name)
+        public async Task<ActionResult<bool>> Exists([FromRoute]string name)
         {
             name = HttpUtility.UrlDecode(name);
-            var result = await Data.ExistsWhereAsync<StoredObject>(new { accountId = AccountId, name });
-            return Ok(result);
+            return await _storedObjectService.ExistsAsync(AccountId, name);
         }
 
         [HttpDelete]
@@ -83,27 +74,23 @@ namespace CloudObjects.App.Controllers
         public async Task<IActionResult> Delete(string name)
         {
             name = HttpUtility.UrlDecode(name);
-            var result = await Data.GetWhereAsync<StoredObject>(new { accountId = AccountId, name });
-            if (result == null) return Ok();
-            await Data.DeleteAsync<StoredObject>(result.Id);
-            return Ok();
+            await _storedObjectService.DeleteAsync(AccountId, name);
+            return NoContent();
         }
 
         [HttpDelete]
         [Route("All")]
         public async Task<IActionResult> DeleteAll()
         {
-            await Data.QueryAsync(new DeleteAllObjects() { AccountId = AccountId });
-            return Ok();
+            await _storedObjectService.DeleteAsync(AccountId);
+            return NoContent();
         }
 
         [HttpPost]
         [Route("List")]
-        public async Task<IActionResult> List(ListStoredObjects query)
+        public async Task<ActionResult<List<StoredObject>>> List(ListStoredObjects query)
         {
-            query.AccountId = AccountId;
-            var results = await Data.QueryAsync(query);
-            return Ok(results);
+            return await _storedObjectService.ListAsync(AccountId, query);
         }
     }
 }

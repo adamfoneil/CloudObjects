@@ -1,28 +1,26 @@
 ﻿using CloudObjects.App.Extensions;
 using CloudObjects.App.ViewModels;
 using CloudObjects.Models;
-using Dapper.CX.SqlServer.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using ModelSync.Models;
 using SqlServer.LocalDb;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
+using CloudObjects.App.Data;
 
 namespace CloudObjects.App.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly DapperCX<long> _data;
+        private readonly CloudObjectsDbContext _dbContext;
         private readonly IConfiguration _config;
 
         public HomeController(
             IConfiguration config,
-            DapperCX<long> data)
+            CloudObjectsDbContext dbContext)
         {
             _config = config;
-            _data = data;
+            _dbContext = dbContext;
         }
 
         public IActionResult Index()
@@ -72,18 +70,16 @@ namespace CloudObjects.App.Controllers
 
             try
             {
-                using (var cn = LocalDb.GetConnection("CloudObjects"))
+                await using var cn = LocalDb.GetConnection("CloudObjects");
+                await DataModel.CreateTablesAsync(new Type[]
                 {
-                    await DataModel.CreateTablesAsync(new Type[]
-                    {
                         typeof(Account),
                         typeof(StoredObject),
                         typeof(Activity)
-                    }, cn);
+                }, cn);
 
-                    result.Success = true;
-                    result.Message = "Database created successfully.";
-                }                
+                result.Success = true;
+                result.Message = "Database created successfully.";
             }
             catch (Exception exc)
             {
