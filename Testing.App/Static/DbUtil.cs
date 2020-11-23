@@ -1,5 +1,4 @@
-﻿using Dapper;
-using Testing.Static;
+﻿using Testing.Static;
 
 namespace Testing.Client.Static
 {

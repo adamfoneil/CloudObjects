@@ -1,11 +1,11 @@
 ﻿using CloudObjects.App.Services;
-using Dapper.CX.SqlServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using CloudObjects.App.Data;
 
 namespace CloudObjects.App.Extensions
 {
@@ -15,8 +15,8 @@ namespace CloudObjects.App.Extensions
         {
             services.AddScoped((sp) =>
             {
-                var data = sp.GetRequiredService<DapperCX<long>>();
-                return new TokenGenerator(jwtSecret, data);
+                var dbContext = sp.GetRequiredService<CloudObjectsDbContext>();
+                return new TokenGenerator(jwtSecret, dbContext);
             });
         }
 

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace CloudObjects.App.ViewModels
+﻿namespace CloudObjects.App.ViewModels
 {
     public class HomeView
     {

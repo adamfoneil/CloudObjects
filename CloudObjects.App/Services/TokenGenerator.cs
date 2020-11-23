@@ -1,33 +1,33 @@
 ﻿using CloudObjects.Models;
-using Dapper.CX.Classes;
-using Dapper.CX.SqlServer.Services;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using CloudObjects.App.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CloudObjects.App.Services
 {
     public class TokenGenerator
     {
         private readonly string _jwtSecret;
-        private readonly DapperCX<long> _data;
+        private readonly CloudObjectsDbContext _dbContext;
 
         public const string AccountIdClaim = "AccountId";
 
         public TokenGenerator(
             string jwtSecret,
-            DapperCX<long> data)
+            CloudObjectsDbContext dbContext)
         {
             _jwtSecret = jwtSecret;
-            _data = data;
+            _dbContext = dbContext;
         }
 
         public async Task<Account> ValidateAccountAsync(string accountName, string accountKey)
         {
-            var result = await _data.GetWhereAsync<Account>(new { name = accountName });
+            var result = await _dbContext.Accounts.FirstOrDefaultAsync(e => e.Name == accountName);
             return (result?.Key.Equals(accountKey) ?? false) ? result : default;
         }
 
@@ -35,7 +35,7 @@ namespace CloudObjects.App.Services
         {
             var account = await ValidateAccountAsync(accountName, accountKey);
             if (account != null) return GenerateToken(account);
-            throw new Exception("Account name or key was not valid.");
+            throw new System.Exception("Account name or key was not valid.");
         }
 
         private string GenerateToken(Account account)

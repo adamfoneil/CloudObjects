@@ -1,5 +1,4 @@
 ﻿using CloudObjects.Client.Interfaces;
-using Dapper.CX.Abstract;
 using System;
 using System.Data;
 using System.Text.Json;

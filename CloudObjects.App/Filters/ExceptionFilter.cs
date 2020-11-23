@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CloudObjects.App.Exception;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace CloudObjects.App.Filters
@@ -10,7 +11,11 @@ namespace CloudObjects.App.Filters
     {
         public void OnException(ExceptionContext context)
         {
-            context.Result = new BadRequestObjectResult(context.Exception.Message);
+            context.Result = context.Exception switch
+            {
+                EntityNotFoundException ex => new NotFoundObjectResult(ex.Message),
+                _ => new BadRequestObjectResult(context.Exception.Message)
+            };
         }
     }
 }
