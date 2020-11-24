@@ -21,6 +21,7 @@ namespace Testing.App
         private readonly WebApplicationFactory<Startup> _factory;
         private readonly HttpClient _client;
 
+        private const string sampleData = "{ \"greeting\" : \"hello\" }";
         private const string _testAccountName = "sample-1239";
 
         public ControllerTests()
@@ -41,6 +42,24 @@ namespace Testing.App
             DeleteAccount();
         }
 
+        [TestMethod]
+        public void DeleteAllObjects()
+        {
+            var account = GetTestAccount();
+            Login(account);
+
+            _client.PostAsJsonAsync("/api/Objects", new StoredObject()
+            {
+                Name = "sample.object",
+                Json = sampleData
+            });
+
+            var result = _client.DeleteAsync("/api/Objects/All").Result;
+            Assert.IsTrue(result.IsSuccessStatusCode);
+            var countStr = result.Content.ReadAsStringAsync().Result;
+            Assert.IsTrue(Convert.ToInt32(countStr) > 0);
+        }
+
         private void DeleteAccount()
         {
             var result = _client.DeleteAsync("/api/Account").Result;
@@ -53,18 +72,16 @@ namespace Testing.App
             var account = GetTestAccount();
             Login(account);
 
-            const string data = "{ \"greeting\" : \"hello\" }";
+            
 
             // important: slashes don't work in names because there's no implicit URL 
             // encoding going on here that otherwise seems to be automatic in Refit
             const string objName = "sample.hello";
 
             var result = _client.PostAsJsonAsync("/api/Objects", new StoredObject()
-            {
-                AccountId = account.Id,
+            {                
                 Name = objName,
-                Json = data,
-                Length = data.Length
+                Json = sampleData
             }).Result;
 
             var storedObj = result.Content.ReadFromJsonAsync<StoredObject>().Result;
