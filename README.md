@@ -17,7 +17,7 @@ await client.CreateAsync("my stuff/object1", new Something()
 // get object from cloud
 var obj = await client.GetAsync<Something>("my stuff/object1");
 ```
-I have an instance running here: [CloudObjects](https://cloudobjects.azurewebsites.net/). This is a bare-minimum work in progress at the moment, but it does do some stuff now.
+~~I have an instance running here: [CloudObjects](https://cloudobjects.azurewebsites.net/). This is a bare-minimum work in progress at the moment, but it does do some stuff now.~~ This site is currently stopped.
 
 While reminiscent of things like MongoDB, Redis, Azure Cosmos DB and such, I don't see this being competitive in performance or scale terms. As usual, this is something I simply enjoy working on.
 
